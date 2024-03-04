@@ -12,6 +12,8 @@ import ProtectedRoute from './pages/protectedRoute';
 import { useAuth } from './context/authContext';
 import HistoryBar from './pages/history';
 import Stats from './pages/stat';
+import ForgottenPasswordPage from './pages/forgottenpassword';
+import ResetPasswordPage from './pages/resetPassword';
 
 function App({ children }) {
   const [loader, setLoader] = useState(false);
@@ -67,6 +69,10 @@ function App({ children }) {
           element={<SignUpPage />}
         />
         <Route
+          path="resetPassword/:resetToken"
+          element={<ResetPasswordPage></ResetPasswordPage>}
+        />
+        <Route
           path="dashboard"
           element={
             <ProtectedRoute>
@@ -102,6 +108,10 @@ function App({ children }) {
             element={<p>This is the anywhere route</p>}
           />
         </Route> */}
+        <Route
+          path="reset_token"
+          element={<ForgottenPasswordPage></ForgottenPasswordPage>}
+        />
       </Routes>
     </>
   );

@@ -1,45 +1,51 @@
 import FormPage from '../lib/form';
 import Button from '../components/button';
-
-import { useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import style from '../utils/btn.style';
+import { useEffect, useState } from 'react';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import { useAuth } from '../context/authContext';
-import ShowAlert from '../components/showAlert';
 import axios from 'axios';
-import { set } from 'mongoose';
+import ShowAlert from '../components/showAlert';
+const formBtnStyle = {
+  ...style,
+  width: '90%',
+  marginLeft: '0',
+};
 
-function ForgottenPasswordPage() {
-  const { isAuthenticated, msg, msgStatus, setMsgStatus, setMsg, token } =
-    useAuth();
+function ResetPasswordPage() {
   const navigate = useNavigate();
-  const [email, setEmail] = useState('');
-  const [loader, setLoader] = useState(false);
+  const { resetToken } = useParams();
+  const { isAuthenticated, setMsg, msg, setMsgStatus, msgStatus } = useAuth();
+  const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [loader, setLoader] = useState();
 
-  async function forgettenpassword(email) {
+  async function resetPassword(password, confirmPassword) {
     try {
-      if (!isAuthenticated) return navigate('/login');
-      const response = await axios.post(
-        'http://localhost:8000/api/user/forget_Password',
+      const response = await axios.patch(
+        `http://localhost:8000/api/user/reset_Password/${resetToken}`,
         {
-          email,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
+          password,
+          confirmPassword,
         }
       );
+
+      console.log(resetToken);
       if (response.status === 200) {
+        console.log(response);
         setLoader(true);
         const { message } = response.data;
         console.log(response.data);
         setMsg(message);
         setMsgStatus('success');
         setLoader(false);
+        navigate('/login');
       } else {
         throw new Error(response.data.message);
       }
     } catch (error) {
+      console.log(error.response);
+
       if (error.response.status === 429) {
         setLoader(false);
         setMsg(error.response.data);
@@ -57,22 +63,11 @@ function ForgottenPasswordPage() {
     }
   }
 
-  async function handleForgettenPassword(event) {
+  async function handleSubmit(event) {
     event.preventDefault();
-    await forgettenpassword(email);
-    // console.log(email, password);
+    await resetPassword(password, confirmPassword);
   }
 
-  useEffect(
-    function () {
-      const timer = setTimeout(() => {
-        setMsg('');
-      }, 1500);
-
-      return () => clearTimeout(timer);
-    },
-    [msg, setMsg]
-  );
   return (
     <FormPage>
       {msg !== '' && (
@@ -86,17 +81,23 @@ function ForgottenPasswordPage() {
       <main>
         <form
           className="login-form"
-          onSubmit={(e) => handleForgettenPassword(e)}>
-          <label>Get your reset Token mailed to your address</label>
+          onSubmit={(e) => handleSubmit(e)}>
+          <label>Set New Password</label>
           <input
-            type="text"
-            placeholder="Email"
+            type="password"
+            placeholder="password"
             className="form-input"
-            onChange={(e) => setEmail(e.target.value)}
+            onChange={(e) => setPassword(e.target.value)}
+          />
+          <input
+            type="password"
+            placeholder="Confirm Password"
+            className="form-input"
+            onChange={(e) => setConfirmPassword(e.target.value)}
           />
 
           <Button className={'form-btn'}>
-            {loader ? 'Sending...' : '  Send Token'}
+            {loader ? 'Processing...' : 'Submit'}
           </Button>
         </form>
       </main>
@@ -104,4 +105,4 @@ function ForgottenPasswordPage() {
   );
 }
 
-export default ForgottenPasswordPage;
+export default ResetPasswordPage;

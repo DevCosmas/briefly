@@ -28,6 +28,11 @@ function reducer(state, action) {
       };
     case 'logout':
       return { ...state, user: null, isAuthenticated: false, token: '' };
+    case 'handleUserUpdate':
+      return {
+        ...state,
+        user: action.payload.data,
+      };
     default:
       throw new Error('No action was found');
   }
@@ -40,6 +45,52 @@ function AuthProvider({ children }) {
   );
   const [msg, setMsg] = useState('');
   const [msgStatus, setMsgStatus] = useState('');
+
+  const handleUserUpdate = async (email, username, password) => {
+    try {
+      // setLoading(true);
+      const response = await Axios.patch(
+        'http://localhost:8000/api/user/Update_me',
+        {
+          email,
+          username,
+          password,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      // console.log(response);
+      if (response.data.status === 'SUCCESS') {
+        const { data } = response.data;
+        console.log(data);
+        setMsg('Changes saved successfully');
+        setMsgStatus('success');
+        dispatch({ type: 'handleUserUpdate', payload: { data } });
+      } else {
+        throw new Error('Something went wrong. Please try again later!');
+      }
+    } catch (error) {
+      console.log(error.response);
+      if (error.response && error.response.status === 500) {
+        setMsg('Something went really wrong. Try again!');
+        setMsgStatus('fail');
+        // setLoading(false);
+      } else if (error.response && error.response.status === 429) {
+        setMsg('Too many requests. Try again later!');
+        setMsgStatus('fail');
+        // setLoading(false);
+      } else {
+        setMsg(error.response.message);
+        setMsgStatus('fail');
+        // setLoading(false);
+      }
+    } finally {
+      // setLoading(false);
+    }
+  };
 
   async function login(email, password) {
     try {
@@ -141,6 +192,7 @@ function AuthProvider({ children }) {
         setMsg,
         msgStatus,
         setMsgStatus,
+        handleUserUpdate,
       }}>
       {children}
     </AuthContext.Provider>

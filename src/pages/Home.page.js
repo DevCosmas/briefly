@@ -1,19 +1,12 @@
-import React, { useState } from 'react';
+import '../App.css';
+import React from 'react';
 import Button from '../components/button';
 import shortner from './../shortner.png';
-import '../App.css';
-import style from '../utils/btn.style';
-import { Link, NavLink } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import Logo from '../components/logo';
 import Header from '../components/header';
 import CreateUrlInput from '../components/input';
 
-const placeholderBtnStyle = {
-  ...style,
-  margin: '0',
-  marginLeft: '20rem',
-  minHeight: '100%',
-};
 function HomePage() {
   return (
     <div className="home modal">

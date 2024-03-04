@@ -9,22 +9,25 @@ import { useAuth } from '../context/authContext';
 import EditPage from './modal.page';
 import { Outlet, Link } from 'react-router-dom';
 import ShowAlert from '../components/showAlert';
+import Setting from '../components/settingBar';
 
 function DashBoard({ data }) {
   const [originalUrlInput, setoriginalUrlInput] = useState();
-
   const { user, token, msg, setMsg, msgStatus, logout, setMsgStatus } =
     useAuth();
-
-  const [dataObj, setDataObj] = useState(null);
-  const [loader, setLoader] = useState(false);
   const [active, setActive] = useState(false);
+  const [settingActive, setSettingActive] = useState(false);
   const [createdLink, setCreatedLink] = useState('');
+  const [username, setUsername] = useState(user.name);
 
   function handleActiveState() {
     if (active) return setActive(false);
     setActive(true);
   }
+
+  useEffect(() => {
+    setUsername(user.username);
+  }, [user]);
 
   async function createShortUrl(originalUrl) {
     try {
@@ -77,6 +80,7 @@ function DashBoard({ data }) {
     e.preventDefault();
     console.log(originalUrlInput);
     await createShortUrl(originalUrlInput);
+    // e.reset();
   };
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -87,6 +91,14 @@ function DashBoard({ data }) {
       clearTimeout(timer);
     };
   }, [msg, setMsg]);
+
+  function handleSettingActive() {
+    setActive(false);
+    setSettingActive(true);
+  }
+  function cancelSettingActive() {
+    setSettingActive(false);
+  }
   return (
     <div className="home">
       {msg !== '' && (
@@ -94,6 +106,7 @@ function DashBoard({ data }) {
           alertMessage={msg}
           alertType={msgStatus}></ShowAlert>
       )}
+
       <Header>
         <Logo />
 
@@ -101,7 +114,7 @@ function DashBoard({ data }) {
           <span
             onClick={() => handleActiveState()}
             className={`username-wrapper ${active ? 'active' : ''}`}>
-            <p> Hi {user.username}</p>
+            <p> Hi {username}</p>
           </span>
           <span className="user-content-disp">
             <span className="list-wrapper">
@@ -123,7 +136,11 @@ function DashBoard({ data }) {
                   d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"
                 />
               </svg>
-              <li className="user-list">Setting</li>
+              <li
+                className="user-list"
+                onClick={handleSettingActive}>
+                Setting
+              </li>
             </span>
             <span className="list-wrapper">
               <svg
@@ -139,7 +156,11 @@ function DashBoard({ data }) {
                   d="M16.5 10.5V6.75a4.5 4.5 0 1 0-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 0 0 2.25-2.25v-6.75a2.25 2.25 0 0 0-2.25-2.25H6.75a2.25 2.25 0 0 0-2.25 2.25v6.75a2.25 2.25 0 0 0 2.25 2.25Z"
                 />
               </svg>
-              <li className="user-list">Forgotten password</li>
+              <Link
+                className="user-list-link"
+                to={'/reset_token'}>
+                <li className="user-list">Forgotten password</li>
+              </Link>
             </span>
             <span className="list-wrapper">
               <svg
@@ -276,6 +297,9 @@ function DashBoard({ data }) {
         </span>
       </article>
       <Outlet></Outlet>
+      <Setting
+        settingActive={settingActive}
+        handleCancel={cancelSettingActive}></Setting>
     </div>
   );
 }

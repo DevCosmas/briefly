@@ -131,7 +131,7 @@ em {
   min-height: 3.2rem;
   padding-left: 0.8rem;
   padding-right: 0.2rem;
-  padding-top: 0;
+  padding-top: 01rem;
   padding-bottom: 0;
   display: flex;
   justify-content: space-between;
@@ -150,6 +150,9 @@ em {
   font-size: 1.2rem;
   text-transform: capitalize;
   padding-left: 0.3rem;
+}
+.short-plhol {
+  padding: 1rem 1rem;
 }
 .img-wrapper {
   width: 70%;
@@ -571,7 +574,47 @@ td.long-content {
   width: 30px;
   height: 30px;
 }
-
+.setting-wrapper {
+  position: absolute;
+  background-color: rgba(24, 30, 41, 0.8);
+  padding-top: 20%;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: none;
+  height: 100%;
+}
+.setting-wrapper-active {
+  display: block;
+}
+.setting-form {
+  background-color: #0f1c35;
+  color: #c9ced6;
+}
+.setting-input {
+  padding: 0.5rem 0.5rem;
+  background-color: #c9ced6;
+  color: #302e2e;
+  border-radius: 8px 8px;
+  width: 90%;
+}
+.setting-cancel-btn {
+  font-size: 2rem;
+  margin-left: 95%;
+  margin-top: -4rem;
+  cursor: pointer;
+}
+.setting-cancel-btn:hover {
+  color: red;
+}
+.setting-input::placeholder {
+  color: #3c3c3c;
+}
+.user-list-link {
+  text-decoration: none;
+  color: #c9ced6;
+}
 /* MEDIA QUERY */
 @media (max-width: 53.12em) {
   .login-form {
