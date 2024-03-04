@@ -548,9 +548,9 @@ td.long-content {
 .alertMsg {
   position: fixed;
   top: 4%;
-  left: 25%;
+  left: 30%;
   min-width: 30rem;
-  background-color: wheat;
+  background-color: #0a1d4d;
   z-index: 10000;
   padding: 0.9rem 2rem;
   border-radius: 8px 8px;
@@ -563,9 +563,15 @@ td.long-content {
 }
 .success {
   color: #fff;
-  background-color: #091224;
+  background-color: #0a1d4d;
+
   border: 0.2px solid #c9ced6;
 }
+.scissor-icon {
+  width: 30px;
+  height: 30px;
+}
+
 /* MEDIA QUERY */
 @media (max-width: 53.12em) {
   .login-form {

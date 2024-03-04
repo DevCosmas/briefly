@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
-import axios from 'axios';
+import Axios from 'axios';
+// import axios from 'axios';
 import Header from '../components/header';
 import Logo from '../components/logo';
 import Button from '../components/button';
@@ -12,11 +13,14 @@ import ShowAlert from '../components/showAlert';
 function DashBoard({ data }) {
   const [originalUrlInput, setoriginalUrlInput] = useState();
 
-  const { user, token, msg, setMsg, msgStatus, setMsgStatus } = useAuth();
+  const { user, token, msg, setMsg, msgStatus, logout, setMsgStatus } =
+    useAuth();
 
   const [dataObj, setDataObj] = useState(null);
   const [loader, setLoader] = useState(false);
   const [active, setActive] = useState(false);
+  const [createdLink, setCreatedLink] = useState('');
+
   function handleActiveState() {
     if (active) return setActive(false);
     setActive(true);
@@ -27,8 +31,9 @@ function DashBoard({ data }) {
       if (!originalUrl || originalUrl === null) {
         setMsg('Provide Long Link');
         setMsgStatus('fail');
+        return;
       }
-      const response = await axios.post(
+      const response = await Axios.post(
         'http://localhost:8000/createUrl',
         {
           originalUrl,
@@ -40,24 +45,26 @@ function DashBoard({ data }) {
         }
       );
 
-      if (response.statusText !== 'ok') throw new Error('Bad network service');
-      if (response.status !== 200) {
+      if (response.status !== 201) {
+        console.log(response);
         setMsg(response.data.message);
         setMsgStatus('fail');
         throw new Error(response.data.message);
       } else {
-        setMsg(response.data.message);
+        console.log(response.data);
+        const { message, newDoc } = response.data;
+        setCreatedLink(newDoc.newUrl);
+        setMsg(message);
         setMsgStatus('success');
       }
-      const { message, newDoc } = response.data;
-      console.log(message);
-      console.log(newDoc);
     } catch (error) {
-      if (error.response.status === 500) {
-        setMsg('something really Wrong. Try again!');
+      console.log(error);
+      console.log(error.response);
+      if (error.response && error.response.status === 500) {
+        setMsg('Something went really wrong. Try again!');
         setMsgStatus('fail');
-      } else if ((error.response.status = 429)) {
-        setMsg('Too many request. Try again later!');
+      } else if (error.response && error.response.status === 429) {
+        setMsg('Too many requests. Try again later!');
         setMsgStatus('fail');
       } else {
         setMsg(error.response.data.message);
@@ -148,7 +155,11 @@ function DashBoard({ data }) {
                   d="M8.25 9V5.25A2.25 2.25 0 0 1 10.5 3h6a2.25 2.25 0 0 1 2.25 2.25v13.5A2.25 2.25 0 0 1 16.5 21h-6a2.25 2.25 0 0 1-2.25-2.25V15m-3 0-3-3m0 0 3-3m-3 3H15"
                 />
               </svg>
-              <li className="user-list">Logout</li>
+              <li
+                className="user-list"
+                onClick={() => logout()}>
+                Logout
+              </li>
             </span>
           </span>
         </div>
@@ -179,8 +190,24 @@ function DashBoard({ data }) {
               className="plchol-input"
               onChange={(e) => setoriginalUrlInput(e.target.value)}
             />
-            <Button className="btn">short url now !</Button>
+            <Button className="btn">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke-width="1.5"
+                stroke="currentColor"
+                class="scissor-icon">
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="m7.848 8.25 1.536.887M7.848 8.25a3 3 0 1 1-5.196-3 3 3 0 0 1 5.196 3Zm1.536.887a2.165 2.165 0 0 1 1.083 1.839c.005.351.054.695.14 1.024M9.384 9.137l2.077 1.199M7.848 15.75l1.536-.887m-1.536.887a3 3 0 1 1-5.196 3 3 3 0 0 1 5.196-3Zm1.536-.887a2.165 2.165 0 0 0 1.083-1.838c.005-.352.054-.695.14-1.025m-1.223 2.863 2.077-1.199m0-3.328a4.323 4.323 0 0 1 2.068-1.379l5.325-1.628a4.5 4.5 0 0 1 2.48-.044l.803.215-7.794 4.5m-2.882-1.664A4.33 4.33 0 0 0 10.607 12m3.736 0 7.794 4.5-.802.215a4.5 4.5 0 0 1-2.48-.043l-5.326-1.629a4.324 4.324 0 0 1-2.068-1.379M14.343 12l-2.882 1.664"
+                />
+              </svg>
+            </Button>
           </form>
+
+          {createdLink !== '' && <p className="newCreate-lin">{createdLink}</p>}
         </div>
       </div>
       <article className="tab">

@@ -50,7 +50,7 @@ function App({ children }) {
     return function () {
       controller.abort();
     };
-  }, [token, user, data]);
+  }, [token, user]);
   return (
     <>
       <Routes>

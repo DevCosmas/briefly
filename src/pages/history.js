@@ -5,12 +5,13 @@ import { useState, useEffect } from 'react';
 import { useAuth } from '../context/authContext';
 import EditPage from './modal.page';
 import DeletePage from './delete.modal';
-import axios from 'axios';
+import Axios from 'axios';
 // import { CopyToClipboard } from 'react-copy-to-clipboard';
-import data from '../data';
+// import data from '../data';
 
 function HistoryBar({ data }) {
-  const { isAuthenticated, user, token } = useAuth();
+  const { isAuthenticated, user, token, msg, setMsg, msgStatus, setMsgStatus } =
+    useAuth();
   const [dataObj, setDataObj] = useState(null);
   const [istoDelete, setIstoDelete] = useState(false);
   const [loader, setLoader] = useState(false);
@@ -20,7 +21,7 @@ function HistoryBar({ data }) {
 
   const handleSetDomainName = async (newName) => {
     try {
-      const response = await axios.patch(
+      const response = await Axios.patch(
         `http://localhost:8000/updateUrl/${dataObj.shortUrl}`,
         {
           shortUrl: newName,
@@ -31,24 +32,44 @@ function HistoryBar({ data }) {
           },
         }
       );
-      console.log(dataObj);
-      setLoader(true);
-      // if (!response.ok) throw new Error('Bad Internet Connection');
-      if (response.status !== 'success') throw new Error(response.data.message);
-      console.log(response.data);
       console.log(response);
+      if (response.status !== 200) {
+        console.log(response);
+        setMsg(response.data.message);
+        setMsgStatus('fail');
+        setLoader(false);
+        throw new Error(response.data.message);
+      } else {
+        console.log(response.data);
+        const { message } = response.data;
+        setLoader(false);
+        setMsg(message);
+        setMsgStatus('success');
+        setDataObj(null);
+      }
     } catch (error) {
-      console.log('Error:', error);
-      setLoader(false);
+      if (error.response && error.response.status === 500) {
+        setMsg('Something went really wrong. Try again!');
+        setMsgStatus('fail');
+        setLoader(false);
+      } else if (error.response && error.response.status === 429) {
+        setMsg('Too many requests. Try again later!');
+        setMsgStatus('fail');
+        setLoader(false);
+      } else {
+        setMsg(error.response.data.message);
+        setMsgStatus('fail');
+        setLoader(false);
+      }
     } finally {
       setLoader(false);
-      // console.log(response.data);
     }
   };
 
   const handleDeleteLink = async (dataObj, token) => {
     try {
-      const response = await axios.delete(
+      console.log(dataObj);
+      const response = await Axios.delete(
         `http://localhost:8000/deleteUrl/${dataObj._id}`,
         {
           headers: {
@@ -56,22 +77,39 @@ function HistoryBar({ data }) {
           },
         }
       );
-      console.log(dataObj);
+
       setLoader(true);
       if (response.status !== 200) {
-        throw new Error('Bad Internet Connection');
-      }
-      if (response.data.status !== 'success') {
-        throw new Error(response.data.message);
-      }
-      console.log(response.data);
-      console.log(response);
+        console.log(response);
+        setMsg(response.data.message);
+        setMsgStatus('fail');
+        setLoader(false);
+        setIstoDelete(false);
 
-      setIstoDelete(false);
-      setDataObj(null);
+        throw new Error(response.data.message);
+      } else {
+        console.log(response.data);
+        const { message } = response.data;
+        setLoader(false);
+        setMsg(message);
+        setMsgStatus('success');
+        setDataObj(null);
+        setIstoDelete(false);
+      }
     } catch (error) {
-      console.error('Error:', error);
-      setLoader(false);
+      if (error.response && error.response.status === 500) {
+        setMsg('Something went really wrong. Try again!');
+        setMsgStatus('fail');
+        setLoader(false);
+      } else if (error.response && error.response.status === 429) {
+        setMsg('Too many requests. Try again later!');
+        setMsgStatus('fail');
+        setLoader(false);
+      } else {
+        setMsg(error.response.data.message);
+        setMsgStatus('fail');
+        setLoader(false);
+      }
     }
   };
 
