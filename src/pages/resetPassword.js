@@ -58,11 +58,21 @@ function ResetPasswordPage() {
         console.log(error.response);
         setLoader(false);
         setMsg(error.response.data.message);
-        setMsg('fail');
+        setMsgStatus('fail');
       }
     }
   }
 
+  useEffect(
+    function () {
+      const timer = setTimeout(() => {
+        setMsg('');
+      }, 1500);
+
+      return () => clearTimeout(timer);
+    },
+    [msg, setMsg]
+  );
   async function handleSubmit(event) {
     event.preventDefault();
     await resetPassword(password, confirmPassword);

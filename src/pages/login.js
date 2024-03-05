@@ -75,7 +75,22 @@ function LoginPage() {
             {/* {loader ? 'processing...' : 'login'} */}
           </Button>
           <span className="form-redirect-msg">
-            Don't have an Account? Sign up <Link to="/signUp">here</Link>
+            Don't have an Account? Sign up{' '}
+            <Link
+              className="redirect-link"
+              to="/signUp">
+              here
+            </Link>
+          </span>
+          {/* <span className="link-em">---OR---</span> */}
+
+          <span className="form-redirect-msg">
+            Forgot Password? Click Here{' '}
+            <Link
+              className="redirect-link"
+              to="/signUp">
+              here
+            </Link>
           </span>
         </form>
       </main>
