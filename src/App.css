@@ -644,7 +644,7 @@ td.long-content {
 }
 .mobile-disp-newUrl {
   color: #c9ced6;
-  padding: 1.5rem 1.5rem;
+  padding: 0.5rem 1.5rem;
   background-color: #3c3c3c;
   font-size: 1.8rem;
   border-radius: 8px 8px;
@@ -653,6 +653,8 @@ td.long-content {
   align-items: center;
   justify-content: space-between;
   box-sizing: border-box;
+  height: 1rem;
+  border: solid red;
 }
 .mobile-disp-newUrl::after {
   content: '\25BE';
@@ -845,8 +847,15 @@ td.long-content {
 }
 
 @media (max-width: 22em) {
-  .username-wrapper {
-    margin-right: 5rem;
+  .header-container {
+    padding-left: 0;
+  }
+  .dashboard-logo {
+    margin-left: -10rem;
+    border: solid red;
+  }
+  .tab {
+    padding-left: 0;
   }
 }
 @media (max-width: 15em) {
@@ -856,6 +865,7 @@ td.long-content {
   }
   .brandName {
     font-size: 2rem;
+    margin-left: -10rem;
   }
   .briefly-heading {
     font-size: 2rem;

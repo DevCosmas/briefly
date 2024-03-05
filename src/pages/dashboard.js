@@ -113,7 +113,7 @@ function DashBoard({ data }) {
       )}
 
       <Header>
-        <Logo />
+        <Logo className={'dashboard-logo'} />
 
         <div className="Profile">
           <span
