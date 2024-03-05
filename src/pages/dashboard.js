@@ -7,7 +7,7 @@ import Button from '../components/button';
 import qrcodePic from '../qrcode-pic.png';
 import { useAuth } from '../context/authContext';
 import EditPage from './modal.page';
-import { Outlet, Link } from 'react-router-dom';
+import { Outlet, Link, useNavigate } from 'react-router-dom';
 import ShowAlert from '../components/showAlert';
 import Setting from '../components/settingBar';
 
@@ -19,6 +19,7 @@ function DashBoard({ data }) {
   const [settingActive, setSettingActive] = useState(false);
   const [createdLink, setCreatedLink] = useState('');
   const [username, setUsername] = useState(user.name);
+  const navigate = useNavigate();
 
   function handleActiveState() {
     if (active) return setActive(false);
@@ -69,6 +70,10 @@ function DashBoard({ data }) {
       } else if (error.response && error.response.status === 429) {
         setMsg('Too many requests. Try again later!');
         setMsgStatus('fail');
+      } else if (error.response && error.response.message === 'jwt expired') {
+        setMsg('');
+        setMsgStatus('');
+        navigate('/login');
       } else {
         setMsg(error.response.data.message);
         setMsgStatus('fail');
@@ -114,7 +119,7 @@ function DashBoard({ data }) {
           <span
             onClick={() => handleActiveState()}
             className={`username-wrapper ${active ? 'active' : ''}`}>
-            <p> Hi {username}</p>
+            <p className="username-wrapper-p"> Hi {username}</p>
           </span>
           <span className="user-content-disp">
             <span className="list-wrapper">
@@ -211,7 +216,7 @@ function DashBoard({ data }) {
               className="plchol-input"
               onChange={(e) => setoriginalUrlInput(e.target.value)}
             />
-            <Button className="btn">
+            <Button className="btn btn-dashboard">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
@@ -227,6 +232,23 @@ function DashBoard({ data }) {
               </svg>
             </Button>
           </form>
+          <button
+            onClick={(e) => handleCreateUrl(e)}
+            className="btn btn-disp">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="1.5"
+              stroke="currentColor"
+              class="scissor-icon">
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="m7.848 8.25 1.536.887M7.848 8.25a3 3 0 1 1-5.196-3 3 3 0 0 1 5.196 3Zm1.536.887a2.165 2.165 0 0 1 1.083 1.839c.005.351.054.695.14 1.024M9.384 9.137l2.077 1.199M7.848 15.75l1.536-.887m-1.536.887a3 3 0 1 1-5.196 3 3 3 0 0 1 5.196-3Zm1.536-.887a2.165 2.165 0 0 0 1.083-1.838c.005-.352.054-.695.14-1.025m-1.223 2.863 2.077-1.199m0-3.328a4.323 4.323 0 0 1 2.068-1.379l5.325-1.628a4.5 4.5 0 0 1 2.48-.044l.803.215-7.794 4.5m-2.882-1.664A4.33 4.33 0 0 0 10.607 12m3.736 0 7.794 4.5-.802.215a4.5 4.5 0 0 1-2.48-.043l-5.326-1.629a4.324 4.324 0 0 1-2.068-1.379M14.343 12l-2.882 1.664"
+              />
+            </svg>
+          </button>
 
           {createdLink !== '' && <p className="newCreate-lin">{createdLink}</p>}
         </div>
@@ -293,6 +315,63 @@ function DashBoard({ data }) {
             className="tab-link"
             to={'/dashboard/anywhere'}>
             click streams
+          </Link>
+        </span>
+        <span className="tab-wrapper tab-disp">
+          <Link
+            className="tab-link"
+            to={'/dashboard'}>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="1.5"
+              stroke="currentColor"
+              class="tab-icon">
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+              />
+            </svg>
+          </Link>
+        </span>
+        <span className="tab-wrapper tab-disp">
+          <Link
+            className="tab-link"
+            to={'/dashboard/stats'}>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="1.5"
+              stroke="currentColor"
+              class="tab-icon">
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 0 1 3 19.875v-6.75ZM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 0 1-1.125-1.125V8.625ZM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 0 1-1.125-1.125V4.125Z"
+              />
+            </svg>
+          </Link>
+        </span>
+        <span className="tab-wrapper tab-disp">
+          <Link
+            className="tab-link"
+            to={'/dashboard/anywhere'}>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="1.5"
+              stroke="currentColor"
+              class="tab-icon">
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M2.25 18 9 11.25l4.306 4.306a11.95 11.95 0 0 1 5.814-5.518l2.74-1.22m0 0-5.94-2.281m5.94 2.28-2.28 5.941"
+              />
+            </svg>
           </Link>
         </span>
       </article>
