@@ -113,6 +113,10 @@ function DashBoard({ data }) {
   function cancelSettingActive() {
     setSettingActive(false);
   }
+  function handleLogout() {
+    logout();
+    navigate('/login');
+  }
   return (
     <div className="home">
       {msg !== '' && (
@@ -192,7 +196,7 @@ function DashBoard({ data }) {
               </svg>
               <li
                 className="user-list"
-                onClick={() => logout()}>
+                onClick={() => handleLogout()}>
                 Logout
               </li>
             </span>

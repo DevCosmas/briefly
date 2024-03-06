@@ -742,8 +742,89 @@ td.long-content {
   overflow-x: hidden;
   text-overflow: ellipsis;
 }
+.click-child {
+  display: flex;
+
+  align-items: center;
+}
 .stats-container {
   color: #fff;
+  width: 100vw;
+  padding-left: 10%;
+  padding-bottom: 10%;
+}
+.stats-h2 {
+  font-size: 3rem;
+  letter-spacing: 1rem;
+  text-transform: capitalize;
+  text-decoration: underline;
+  padding-top: 2rem;
+  padding-bottom: 0.5rem;
+  background-image: linear-gradient(
+    to right,
+    #144ee3 10%,
+    #eb568e 20%,
+    #144ee3 40%,
+    #eb568e 70%
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+.click-list {
+  list-style: none;
+  font-size: 1.8rem;
+  padding: 0;
+  margin: 0;
+}
+.cont-wrap {
+  display: flex;
+  align-items: center;
+}
+.click-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  max-width: 35rem;
+  column-gap: 10rem;
+}
+.click-icon {
+  width: 20px;
+  height: 20px;
+  margin-left: 2rem;
+  stroke: forestgreen;
+}
+.mostVisited-h3 {
+  font-size: 1.8rem;
+  text-transform: capitalize;
+  margin-bottom: -1rem;
+  font-family: sans-serif;
+}
+.mostVisited-h3::before {
+  content: '';
+  display: inline-block;
+  background-color: green;
+  width: 10px;
+  height: 10px;
+  margin-right: 10px;
+}
+
+.leastVisited-h3::before {
+  content: '';
+  display: inline-block;
+  background-color: red;
+  width: 10px;
+  height: 10px;
+  margin-right: 10px;
+}
+
+.most-visited-child {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 2rem;
+  font-size: 1.8rem;
 }
 /* MEDIA QUERY */
 
@@ -895,6 +976,26 @@ td.long-content {
   .plchol-input {
     border: none;
     width: 90%;
+  }
+}
+@media (max-width: 26em) {
+  .most-visited-child,
+  .click-wrapper {
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    gap: 0;
+    /* margin-bottom: 3rem; */
+  }
+  .mostVisited-h3 {
+    margin-top: 5rem;
+  }
+  .visited-link {
+    max-width: 15rem;
+
+    white-space: nowrap;
+    overflow-x: hidden;
+    text-overflow: ellipsis;
   }
 }
 @media (max-width: 25.44em) {
