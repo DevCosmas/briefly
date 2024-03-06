@@ -32,7 +32,7 @@ function LoginPage() {
   useEffect(() => {
     const timer = setTimeout(() => {
       setMsg('');
-    }, 3000);
+    }, 1500);
 
     return () => {
       clearTimeout(timer);

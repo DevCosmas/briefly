@@ -20,6 +20,10 @@ function App({ children }) {
   const [data, setData] = useState([]);
   const { token, user } = useAuth();
 
+  //   totalClicks,
+
+  // }
+
   async function handleEdit(e) {
     e.preventDefault();
     setLoader(true);
@@ -85,7 +89,7 @@ function App({ children }) {
           />
           <Route
             path="Stats"
-            element={<Stats></Stats>}
+            element={<Stats data={data}></Stats>}
           />
           <Route
             path="anywhere"

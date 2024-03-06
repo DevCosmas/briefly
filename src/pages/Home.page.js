@@ -62,10 +62,12 @@ function HomePage() {
           and analyze your link <br /> Super easy and fast.
         </p>
 
-        <CreateUrlInput redirectTo="signUp"></CreateUrlInput>
-        <Link to={'/signUp'}>
+        <CreateUrlInput
+          wrapperClass="wrapperClass"
+          redirectTo="signUp"></CreateUrlInput>
+        {/* <Link to={'/signUp'}>
           <Button className={'shorten-btn'}>Shorten Url Now !</Button>
-        </Link>
+        </Link> */}
         <div className="img-wrapper">
           <img
             src={shortner}
