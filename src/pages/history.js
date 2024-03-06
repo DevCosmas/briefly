@@ -10,8 +10,7 @@ import Axios from 'axios';
 // import data from '../data';
 
 function HistoryBar({ data }) {
-  const { isAuthenticated, user, token, msg, setMsg, msgStatus, setMsgStatus } =
-    useAuth();
+  const { token, msg, setMsg, msgStatus, setMsgStatus } = useAuth();
   const [dataObj, setDataObj] = useState(null);
   const [istoDelete, setIstoDelete] = useState(false);
   const [loader, setLoader] = useState(false);
@@ -58,6 +57,10 @@ function HistoryBar({ data }) {
         setMsg('Too many requests. Try again later!');
         setMsgStatus('fail');
         setLoader(false);
+      } else if (error.response.data.message === 'jwt expired') {
+        setMsg('');
+        setMsgStatus('');
+        navigate('/login');
       } else {
         setMsg(error.response.data.message);
         setMsgStatus('fail');
@@ -107,6 +110,10 @@ function HistoryBar({ data }) {
         setMsg('Too many requests. Try again later!');
         setMsgStatus('fail');
         setLoader(false);
+      } else if (error.response.data.message === 'jwt expired') {
+        setMsg('');
+        setMsgStatus('');
+        navigate('/login');
       } else {
         setMsg(error.response.data.message);
         setMsgStatus('fail');
@@ -297,7 +304,7 @@ function HistoryBar({ data }) {
                     viewBox="0 0 24 24"
                     strokeWidth="1.5"
                     stroke="currentColor"
-                    className="clip-copy">
+                    className="clip-copy mobile-icon">
                     <path
                       strokeLinecap="round"
                       strokeLinejoin="round"
@@ -315,7 +322,7 @@ function HistoryBar({ data }) {
                     viewBox="0 0 24 24"
                     stroke-width="1.5"
                     stroke="currentColor"
-                    class="clip-copy">
+                    class="clip-copy mobile-icon">
                     <path
                       stroke-linecap="round"
                       stroke-linejoin="round"

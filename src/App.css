@@ -562,7 +562,7 @@ td.long-content {
 .alertMsg {
   position: fixed;
   top: 4%;
-  left: 30%;
+  left: 40%;
   min-width: 30rem;
   background-color: #0a1d4d;
   z-index: 10000;
@@ -653,8 +653,7 @@ td.long-content {
   align-items: center;
   justify-content: space-between;
   box-sizing: border-box;
-  height: 1rem;
-  border: solid red;
+  height: 5rem;
 }
 .mobile-disp-newUrl::after {
   content: '\25BE';
@@ -669,8 +668,10 @@ td.long-content {
   color: #fff;
 }
 .mobile-disp-list {
-  background-color: #121d38;
-  margin-top: 2rem;
+  background-color: #080e1d;
+  border: 0.5px solid #c9ced6;
+  border-radius: 8px 8px;
+  margin-top: 1.2rem;
   margin-bottom: 4rem;
   padding: 0.5rem 1.5rem;
   display: none;
@@ -682,14 +683,22 @@ td.long-content {
 .mobile-disp-list-sp-el {
   display: flex;
   justify-content: space-between;
+  align-items: center;
   margin-bottom: 1rem;
   padding: 0.5rem 0.5rem;
   font-size: 1.2rem;
   box-sizing: border-box;
 }
+.mobile-disp-list-h3-el {
+  font-size: 1.8rem;
+}
 .mobile-disp-list-img-el {
   width: 30px;
   height: 30px;
+}
+.mobile-icon {
+  width: 20px;
+  height: 20px;
 }
 .tab-disp {
   display: none;
@@ -722,6 +731,9 @@ td.long-content {
   }
   .mobile-disp-db {
     display: block;
+  }
+  .alertMsg {
+    left: 25%;
   }
 }
 @media (max-width: 53.13em) {
@@ -802,6 +814,12 @@ td.long-content {
   .user-content-disp {
     margin-left: -20rem;
   }
+  .alertMsg {
+    left: 5%;
+    top: 2%;
+    width: 70%;
+    margin: 0 auto;
+  }
 }
 
 @media (max-width: 31.25em) {
@@ -851,11 +869,21 @@ td.long-content {
     padding-left: 0;
   }
   .dashboard-logo {
-    margin-left: -10rem;
-    border: solid red;
+    margin-left: 1rem;
+    font-size: 2rem;
   }
   .tab {
     padding-left: 0;
+  }
+  .user-content-disp {
+    width: 20rem;
+    margin-left: -10rem;
+  }
+  .alertMsg {
+    left: 0;
+    top: 0;
+    width: 100%;
+    border-radius: none;
   }
 }
 @media (max-width: 15em) {
@@ -864,8 +892,8 @@ td.long-content {
     height: 30px;
   }
   .brandName {
-    font-size: 2rem;
-    margin-left: -10rem;
+    font-size: 1.8rem;
+    margin-left: -1rem;
   }
   .briefly-heading {
     font-size: 2rem;

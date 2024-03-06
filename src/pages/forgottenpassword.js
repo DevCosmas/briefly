@@ -6,7 +6,6 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/authContext';
 import ShowAlert from '../components/showAlert';
 import axios from 'axios';
-import { set } from 'mongoose';
 
 function ForgottenPasswordPage() {
   const { isAuthenticated, msg, msgStatus, setMsgStatus, setMsg, token } =
