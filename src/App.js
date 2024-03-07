@@ -13,6 +13,7 @@ import Stats from './pages/stat';
 import ForgottenPasswordPage from './pages/forgottenpassword';
 import ResetPasswordPage from './pages/resetPassword';
 import ErrorPage from './pages/404';
+import ClipCopy from './components/clip';
 
 function App({ children }) {
   // const [loader, setLoader] = useState(false);
@@ -56,6 +57,11 @@ function App({ children }) {
         <Route
           path="login"
           element={<LoginPage />}
+        />
+
+        <Route
+          path="clip"
+          element={<ClipCopy />}
         />
         <Route
           path="signUp"

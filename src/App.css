@@ -890,6 +890,12 @@ td.long-content {
 .tab-link-active {
   color: red;
 }
+.copied-text {
+  color: green;
+}
+.dis {
+  display: none;
+}
 /* MEDIA QUERY */
 
 @media (max-width: 75.9em) {
