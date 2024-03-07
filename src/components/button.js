@@ -1,19 +1,7 @@
 import '../App.css';
 
-function Button({
-  children,
-  className,
-  // handleClick = undefined,
-  // param = undefined,
-}) {
-  return (
-    <button
-      className={className}
-      // onClick={() => handleClick(param)}
-    >
-      {children}
-    </button>
-  );
+function Button({ children, className }) {
+  return <button className={className}>{children}</button>;
 }
 
 export default Button;

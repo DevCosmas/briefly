@@ -1,14 +1,9 @@
 import FormPage from '../lib/form';
 import Button from '../components/button';
-import style from '../utils/btn.style';
+
 import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/authContext';
-const formBtnStyle = {
-  ...style,
-  width: '90%',
-  marginLeft: '0',
-};
 
 function SignUpPage() {
   const navigate = useNavigate();

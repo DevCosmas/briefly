@@ -18,7 +18,7 @@ function DeletePage({ data, handleCancelBtn, handleDeleteLink, setDataObj }) {
       <FormPage>
         <form className="login-form form-modal">
           <p className="delete-qst">
-            are you sure you want to delete this link
+            Are you sure you want to delete this link
           </p>
           <span className="delete-btn-wrapper">
             <button

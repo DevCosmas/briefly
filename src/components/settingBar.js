@@ -7,7 +7,7 @@ import axios from 'axios';
 function Setting({ settingActive, handleCancel }) {
   const { user, handleUserUpdate } = useAuth();
   const [email, setEmail] = useState('');
-  // const [password, setPassword] = useState('');
+
   const [username, setUsername] = useState('');
   const [loading, setLoading] = useState(false);
 

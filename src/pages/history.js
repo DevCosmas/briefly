@@ -5,6 +5,7 @@ import { useState, useEffect } from 'react';
 import { useAuth } from '../context/authContext';
 import EditPage from './modal.page';
 import DeletePage from './delete.modal';
+import DownloadQRCode from '../components/qrcode';
 import Axios from 'axios';
 // import { CopyToClipboard } from 'react-copy-to-clipboard';
 // import data from '../data';
@@ -159,7 +160,7 @@ function HistoryBar({ data }) {
         </thead>
         <tbody>
           {data.length === 0 ? (
-            <p>No data To load 🤨</p>
+            <p className="hist-loader">No data To load 🤨</p>
           ) : (
             data.map((item) => (
               <tr
@@ -193,11 +194,7 @@ function HistoryBar({ data }) {
                 <td>{item.visitationCount}</td>
                 <td>
                   <span className="qrcode-container">
-                    <img
-                      src={qrcodePic}
-                      className="qrcode-pic"
-                      alt="a qrcode "
-                    />
+                    <DownloadQRCode qrCodeUrl={item.newUrl}></DownloadQRCode>
                   </span>
                 </td>
                 <td>
@@ -302,10 +299,9 @@ function HistoryBar({ data }) {
             </span>
             <span className="mobile-disp-list-sp-el">
               <h3 className="mobile-disp-list-h3-el">QrCode</h3>
-              <img
-                src={qrcodePic}
-                alt="qr code"
-                className="mobile-disp-list-img-el"></img>
+              <DownloadQRCode
+                className={'mobile-disp-list-img-el'}
+                qrCodeUrl={item.newUrl}></DownloadQRCode>
             </span>
             <span className="mobile-disp-list-sp-el">
               <h3 className="mobile-disp-list-h3-el">Actions</h3>

@@ -1,16 +1,10 @@
 import FormPage from '../lib/form';
 import Button from '../components/button';
-import style from '../utils/btn.style';
+
 import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/authContext';
 import ShowAlert from '../components/showAlert';
-
-const formBtnStyle = {
-  ...style,
-  width: '90%',
-  marginLeft: '0',
-};
 
 function LoginPage() {
   const { login, isAuthenticated, msg, msgStatus, setMsg } = useAuth();

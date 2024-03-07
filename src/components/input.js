@@ -1,4 +1,3 @@
-import style from '../utils/btn.style';
 import { Link } from 'react-router-dom';
 import Button from './button';
 import '../App.css';
@@ -27,16 +26,7 @@ function CreateUrlInput({ wrapperClass = '', redirectTo = '', secClassName }) {
           className="plchol-input"
         />
         <Link to={`/${redirectTo}`}>
-          <Button
-            className={'btn'}
-            // backgroundColor={'#144EE3'}
-            // textColor={'#fff'}
-            // hoverBackgrColor={'#3c3c3c'}
-            // hoverTextColor={'#c9ced6'}
-            // style={placeholderBtnStyle}
-          >
-            short url now !
-          </Button>
+          <Button className={'btn'}>short url now !</Button>
         </Link>
       </form>
     </div>

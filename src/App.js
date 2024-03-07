@@ -1,37 +1,27 @@
-import { useEffect, useRef, useState } from 'react';
-import { Route, Routes, useNavigate } from 'react-router-dom';
 import './App.css';
+import { useEffect, useState } from 'react';
+import { Route, Routes } from 'react-router-dom';
 import HomePage from './pages/Home.page';
 import LoginPage from './pages/login';
 import SignUpPage from './pages/signup';
 import DashBoard from './pages/dashboard';
 import axios from 'axios';
-import PopUp from './utils/popup';
-import EditPage from './pages/modal.page';
 import ProtectedRoute from './pages/protectedRoute';
 import { useAuth } from './context/authContext';
 import HistoryBar from './pages/history';
 import Stats from './pages/stat';
 import ForgottenPasswordPage from './pages/forgottenpassword';
 import ResetPasswordPage from './pages/resetPassword';
+import ErrorPage from './pages/404';
 
 function App({ children }) {
-  const [loader, setLoader] = useState(false);
+  // const [loader, setLoader] = useState(false);
   const [data, setData] = useState([]);
   const { token, user } = useAuth();
 
-  //   totalClicks,
-
-  // }
-
-  async function handleEdit(e) {
-    e.preventDefault();
-    setLoader(true);
-  }
-
   useEffect(() => {
     const controller = new AbortController();
-    // let isMounted = true;
+
     const fetchData = async () => {
       try {
         const response = await axios.get(`http://localhost:8000/findAll?`, {
@@ -41,22 +31,20 @@ function App({ children }) {
           signal: controller.signal,
         });
         const resData = response.data;
-        console.log('api-call:', resData);
-        setData((data) => resData.allMyUrl);
-        // console.log('api-call:', data);
-        // console.log('data from setFn', data);
+        console.log(resData);
+        const { data: dataFromApi } = resData;
+        console.log('resdata', resData);
+        setData(dataFromApi);
       } catch (error) {
-        console.error('Error fetching data:', error);
+        console.log('Error fetching data:', error.response);
       }
     };
-    // if (token && user && isMounted) {
-    //   fetchData();
-    // }
+
     fetchData();
     return function () {
       controller.abort();
     };
-  }, [token, user]);
+  }, [token, user, data, setData]);
   return (
     <>
       <Routes>
@@ -64,6 +52,7 @@ function App({ children }) {
           path="/"
           element={<HomePage />}
         />
+
         <Route
           path="login"
           element={<LoginPage />}
@@ -75,6 +64,10 @@ function App({ children }) {
         <Route
           path="resetPassword/:resetToken"
           element={<ResetPasswordPage></ResetPasswordPage>}
+        />
+        <Route
+          path="reset_token"
+          element={<ForgottenPasswordPage></ForgottenPasswordPage>}
         />
         <Route
           path="dashboard"
@@ -92,29 +85,13 @@ function App({ children }) {
             element={<Stats data={data}></Stats>}
           />
           <Route
-            path="anywhere"
-            element={<p>This is the anywhere route</p>}
+            path="Click_stream"
+            element={<h2 className="Click_stream_h2">We are working on it</h2>}
           />
         </Route>
-        {/* <Route
-          path="dashboard"
-          element={<DashBoard />}>
-          <Route
-            index
-            element={<HistoryBar data={data}></HistoryBar>}
-          />
-          <Route
-            path="Stats"
-            element={<Stats></Stats>}
-          />
-          <Route
-            path="anywhere"
-            element={<p>This is the anywhere route</p>}
-          />
-        </Route> */}
         <Route
-          path="reset_token"
-          element={<ForgottenPasswordPage></ForgottenPasswordPage>}
+          path="*"
+          element={<ErrorPage></ErrorPage>}
         />
       </Routes>
     </>

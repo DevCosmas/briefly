@@ -1,5 +1,5 @@
 import '../App.css';
-import React from 'react';
+import React, { useState } from 'react';
 import Button from '../components/button';
 import shortner from './../shortner.png';
 import { Link } from 'react-router-dom';
@@ -8,6 +8,16 @@ import Header from '../components/header';
 import CreateUrlInput from '../components/input';
 
 function HomePage() {
+  const [active, setActive] = useState(false);
+
+  function setHarmburgerActive() {
+    console.log('setting-active');
+    if (active) {
+      return setActive(false);
+    } else {
+      setActive(true);
+    }
+  }
   return (
     <div className="home modal">
       <Header>
@@ -37,14 +47,16 @@ function HomePage() {
             <Button className={'btn'}>Sign up</Button>
           </Link>
         </span>
-        <span className="harmbuger-wrapper">
+        <span
+          className="harmbuger-wrapper"
+          onClick={() => setHarmburgerActive()}>
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
             viewBox="0 0 24 24"
             stroke-width="1.5"
             stroke="currentColor"
-            class="hamburger-icon harmbuger"
+            class={`hamburger-icon harmbuger ${active ? 'active' : ''}`}
             id="harmbuger">
             <path
               stroke-linecap="round"
@@ -53,6 +65,19 @@ function HomePage() {
             />
           </svg>
         </span>
+        <div className={`hamburger-content ${active ? 'content-active' : ''}`}>
+          <a
+            className="h-a"
+            href="/login">
+            Login
+          </a>
+          <a
+            className="h-a"
+            href="/signUp">
+            {' '}
+            Sign Up
+          </a>
+        </div>
       </Header>
       <main>
         <h1 className="briefly-heading">Shorten your looong URL links :) </h1>
@@ -65,9 +90,6 @@ function HomePage() {
         <CreateUrlInput
           wrapperClass="wrapperClass"
           redirectTo="signUp"></CreateUrlInput>
-        {/* <Link to={'/signUp'}>
-          <Button className={'shorten-btn'}>Shorten Url Now !</Button>
-        </Link> */}
         <div className="img-wrapper">
           <img
             src={shortner}
