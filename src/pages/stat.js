@@ -1,4 +1,3 @@
-import { useEffect } from 'react';
 function Stats({ data }) {
   let totalClicks = data
     .map((obj) => obj.visitationCount)
@@ -11,8 +10,6 @@ function Stats({ data }) {
   let leastVisited = data.reduce((prev, current) => {
     return prev.visitationCount < current.visitationCount ? prev : current;
   });
-
-  // console.log(mostClicked);
 
   return (
     <div className="stats-container">

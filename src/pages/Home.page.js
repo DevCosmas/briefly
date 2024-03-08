@@ -6,10 +6,13 @@ import { Link } from 'react-router-dom';
 import Logo from '../components/logo';
 import Header from '../components/header';
 import CreateUrlInput from '../components/input';
+import { useAuth } from '../context/authContext';
+import { useEffect } from 'react';
 
 function HomePage() {
   const [active, setActive] = useState(false);
-
+  const { setTitle } = useAuth();
+  useEffect(() => setTitle('Briefly'), [setTitle]);
   function setHarmburgerActive() {
     console.log('setting-active');
     if (active) {
@@ -18,6 +21,7 @@ function HomePage() {
       setActive(true);
     }
   }
+
   return (
     <div className="home modal">
       <Header>

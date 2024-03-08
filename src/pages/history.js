@@ -1,6 +1,5 @@
 import Button from '../components/button';
 import { Link, useNavigate } from 'react-router-dom';
-import qrcodePic from '../qrcode-pic.png';
 import { useState, useEffect } from 'react';
 import { useAuth } from '../context/authContext';
 import EditPage from './modal.page';
@@ -8,6 +7,7 @@ import DeletePage from './delete.modal';
 import DownloadQRCode from '../components/qrcode';
 import Axios from 'axios';
 import ClipCopy from '../components/clip';
+import { BASEURLDEV, BASEURLPROD } from '../utils/constant';
 
 function HistoryBar({ data }) {
   const { token, msg, setMsg, msgStatus, setMsgStatus } = useAuth();
@@ -23,7 +23,7 @@ function HistoryBar({ data }) {
   const handleSetDomainName = async (newName) => {
     try {
       const response = await Axios.patch(
-        `http://localhost:8000/updateUrl/${dataObj.shortUrl}`,
+        `${BASEURLDEV}/updateUrl/${dataObj.shortUrl}`,
         {
           shortUrl: newName,
         },
@@ -75,7 +75,7 @@ function HistoryBar({ data }) {
     try {
       console.log(dataObj);
       const response = await Axios.delete(
-        `http://localhost:8000/deleteUrl/${dataObj._id}`,
+        `${BASEURLDEV}/deleteUrl/${dataObj._id}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -158,7 +158,7 @@ function HistoryBar({ data }) {
           </tr>
         </thead>
         <tbody>
-          {data.length === 0 ? (
+          {data.length === 0 || null ? (
             <p className="hist-loader">No data To load 🤨</p>
           ) : (
             data.map((item) => (

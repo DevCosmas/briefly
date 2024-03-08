@@ -2,18 +2,17 @@ import Modal from '../components/modal';
 import FormPage from '../lib/form';
 import Button from '../components/button';
 import '../App.css';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useAuth } from '../context/authContext';
 
 function EditPage({ data, handleCancelBtn, loader, handleSetDomainName }) {
   const [domainName, setDomainName] = useState('');
-
-  console.log(data);
-
+  const { setTitle } = useAuth();
   async function handleEdit(e) {
     e.preventDefault();
     await handleSetDomainName(domainName);
   }
+  useEffect(() => setTitle('Edit_link'), [setTitle]);
   return (
     <Modal>
       <FormPage>

@@ -7,18 +7,32 @@ import { useAuth } from '../context/authContext';
 import ShowAlert from '../components/showAlert';
 
 function LoginPage() {
-  const { login, isAuthenticated, msg, msgStatus, setMsg } = useAuth();
+  const {
+    login,
+    isAuthenticated,
+    msg,
+    msgStatus,
+    setMsg,
+    loader,
+    setLoader,
+    setTitle,
+  } = useAuth();
   const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+
   async function handleLoginSubmit(event) {
     event.preventDefault();
-    await login(email, password);
-    console.log(email, password);
+    if (loader) {
+      setLoader(false);
+      await login(email, password);
+    } else {
+      setLoader(true);
+      await login(email, password);
+    }
   }
   useEffect(
     function () {
-      console.log(isAuthenticated);
       if (isAuthenticated) navigate('/dashboard', { replace: true });
     },
     [isAuthenticated, navigate]
@@ -32,6 +46,7 @@ function LoginPage() {
       clearTimeout(timer);
     };
   }, [msg, setMsg]);
+  useEffect(() => setTitle('Login'), [setTitle]);
   return (
     <FormPage>
       {msg !== '' && (
@@ -58,16 +73,11 @@ function LoginPage() {
             className="form-input"
             onChange={(e) => setPassword(e.target.value)}
           />
-          <Button
-            // backgroundColor={'#3c3c3c'}
-            // textColor={'#fff'}
-            // style={formBtnStyle}
-            // hoverBackgrColor={'#144ee3 '}
-            // hoverTextColor={'#c9ced6'}
-            className={'form-btn'}>
-            login
-            {/* {loader ? 'processing...' : 'login'} */}
+
+          <Button className={'form-btn'}>
+            {loader ? 'Sign in ...' : 'Login'}
           </Button>
+
           <span className="form-redirect-msg">
             Don't have an Account? Sign up{' '}
             <Link
@@ -76,13 +86,12 @@ function LoginPage() {
               here
             </Link>
           </span>
-          {/* <span className="link-em">---OR---</span> */}
 
           <span className="form-redirect-msg">
             Forgot Password? Click Here{' '}
             <Link
               className="redirect-link"
-              to="/signUp">
+              to="/reset_token">
               here
             </Link>
           </span>

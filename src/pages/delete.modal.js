@@ -2,17 +2,18 @@ import Modal from '../components/modal';
 import FormPage from '../lib/form';
 import Button from '../components/button';
 import '../App.css';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 import { useAuth } from '../context/authContext';
 
 function DeletePage({ data, handleCancelBtn, handleDeleteLink, setDataObj }) {
-  const { token } = useAuth();
+  const { token, setTitle } = useAuth();
 
   async function handleDelete(e) {
     e.preventDefault();
     await handleDeleteLink(data, token);
   }
+  useEffect(() => setTitle('DeleteLink'), [setTitle]);
   return (
     <Modal>
       <FormPage>

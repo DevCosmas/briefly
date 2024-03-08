@@ -5,10 +5,18 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/authContext';
 import ShowAlert from '../components/showAlert';
 import axios from 'axios';
+import { BASEURLDEV, BASEURLPROD } from '../utils/constant';
 
 function ForgottenPasswordPage() {
-  const { isAuthenticated, msg, msgStatus, setMsgStatus, setMsg, token } =
-    useAuth();
+  const {
+    isAuthenticated,
+    msg,
+    msgStatus,
+    setMsgStatus,
+    setMsg,
+    token,
+    setTitle,
+  } = useAuth();
   const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [loader, setLoader] = useState(false);
@@ -17,7 +25,7 @@ function ForgottenPasswordPage() {
     try {
       if (!isAuthenticated) return navigate('/login');
       const response = await axios.post(
-        'http://localhost:8000/api/user/forget_Password',
+        `${BASEURLDEV}/api/user/forget_Password`,
         {
           email,
         },
@@ -28,9 +36,7 @@ function ForgottenPasswordPage() {
         }
       );
       if (response.status === 200) {
-        setLoader(true);
         const { message } = response.data;
-        console.log(response.data);
         setMsg(message);
         setMsgStatus('success');
         setLoader(false);
@@ -57,8 +63,8 @@ function ForgottenPasswordPage() {
 
   async function handleForgettenPassword(event) {
     event.preventDefault();
+    setLoader(true);
     await forgettenpassword(email);
-    // console.log(email, password);
   }
 
   useEffect(
@@ -71,6 +77,7 @@ function ForgottenPasswordPage() {
     },
     [msg, setMsg]
   );
+  useEffect(() => setTitle('Forgot_password'), [setTitle]);
   return (
     <FormPage>
       {msg !== '' && (

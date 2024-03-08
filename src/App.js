@@ -14,38 +14,54 @@ import ForgottenPasswordPage from './pages/forgottenpassword';
 import ResetPasswordPage from './pages/resetPassword';
 import ErrorPage from './pages/404';
 import ClipCopy from './components/clip';
+import { BASEURLDEV, BASEURLPROD } from './utils/constant';
 
 function App({ children }) {
-  // const [loader, setLoader] = useState(false);
   const [data, setData] = useState([]);
-  const { token, user } = useAuth();
+  const { token, user, title, setTitle } = useAuth();
 
-  useEffect(() => {
-    const controller = new AbortController();
+  useEffect(
+    function () {
+      document.title = `Briefly | ${title}`;
+      return function () {
+        document.title = `${
+          document.title && title === 'Briefly'
+            ? 'Briefly'
+            : `Briefly | ${title}`
+        }`;
+      };
+    },
+    [title, setTitle]
+  );
+  useEffect(
+    function () {
+      const controller = new AbortController();
 
-    const fetchData = async () => {
-      try {
-        const response = await axios.get(`http://localhost:8000/findAll?`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-          signal: controller.signal,
-        });
-        const resData = response.data;
-        console.log(resData);
-        const { data: dataFromApi } = resData;
-        console.log('resdata', resData);
-        setData(dataFromApi);
-      } catch (error) {
-        console.log('Error fetching data:', error.response);
-      }
-    };
+      const fetchData = async () => {
+        try {
+          const response = await axios.get(`${BASEURLDEV}/findAll?`, {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+            signal: controller.signal,
+          });
+          const resData = response.data;
+          console.log(resData);
+          const { data: dataFromApi } = resData;
+          console.log('resdata', resData);
+          setData(dataFromApi);
+        } catch (error) {
+          console.log('Error fetching data:', error.response);
+        }
+      };
 
-    fetchData();
-    return function () {
-      controller.abort();
-    };
-  }, [token, user, data, setData]);
+      fetchData();
+      // return function () {
+      //   controller.abort();
+      // };
+    },
+    [token, user, data, setData]
+  );
   return (
     <>
       <Routes>

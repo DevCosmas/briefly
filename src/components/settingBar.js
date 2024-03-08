@@ -1,15 +1,12 @@
-import FormPage from '../lib/form';
 import { useState, useEffect } from 'react';
 import Button from './button';
 import { useAuth } from '../context/authContext';
-import axios from 'axios';
 
 function Setting({ settingActive, handleCancel }) {
-  const { user, handleUserUpdate } = useAuth();
+  const { user, handleUserUpdate, loader, setLoader } = useAuth();
   const [email, setEmail] = useState('');
 
   const [username, setUsername] = useState('');
-  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     setEmail(user.email);
@@ -18,6 +15,7 @@ function Setting({ settingActive, handleCancel }) {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+    setLoader(true);
     await handleUserUpdate(email, username);
     return handleCancel();
   };
@@ -50,18 +48,11 @@ function Setting({ settingActive, handleCancel }) {
           value={username}
           onChange={(e) => setUsername(e.target.value)}
         />
-        {/* <input
-          type="password"
-          placeholder="*******"
-          className="form-input setting-input"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        /> */}
 
         <Button
           className={'form-btn'}
-          disabled={loading}>
-          {loading ? 'Saving...' : 'Save Changes'}
+          disabled={loader}>
+          {loader ? 'Saving...' : 'Save Changes'}
         </Button>
       </form>
     </div>

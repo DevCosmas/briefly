@@ -6,6 +6,7 @@ import {
   useState,
 } from 'react';
 import Axios from 'axios';
+import { BASEURLDEV, BASEURLPROD } from '../utils/constant';
 
 const AuthContext = createContext();
 
@@ -50,12 +51,14 @@ function AuthProvider({ children }) {
   );
   const [msg, setMsg] = useState('');
   const [msgStatus, setMsgStatus] = useState('');
+  const [loader, setLoader] = useState(false);
+  const [title, setTitle] = useState('');
 
   const handleUserUpdate = async (email, username, password) => {
     try {
       // setLoading(true);
       const response = await Axios.patch(
-        'http://localhost:8000/api/user/Update_me',
+        `${BASEURLDEV}/api/user/Update_me`,
         {
           email,
           username,
@@ -70,7 +73,7 @@ function AuthProvider({ children }) {
       // console.log(response);
       if (response.data.status === 'SUCCESS') {
         const { data } = response.data;
-        console.log(data);
+
         setMsg('Changes saved successfully');
         setMsgStatus('success');
         dispatch({ type: 'handleUserUpdate', payload: { data } });
@@ -82,18 +85,18 @@ function AuthProvider({ children }) {
       if (error.response && error.response.status === 500) {
         setMsg('Something went really wrong. Try again!');
         setMsgStatus('fail');
-        // setLoading(false);
+        setLoader(false);
       } else if (error.response && error.response.status === 429) {
         setMsg('Too many requests. Try again later!');
         setMsgStatus('fail');
-        // setLoading(false);
+        setLoader(false);
       } else {
         setMsg(error.response.message);
         setMsgStatus('fail');
-        // setLoading(false);
+        setLoader(false);
       }
     } finally {
-      // setLoading(false);
+      setLoader(false);
     }
   };
 
@@ -103,19 +106,17 @@ function AuthProvider({ children }) {
         setMsg('Empty field!');
         setMsgStatus('fail');
       }
-      const response = await Axios.post(
-        'http://localhost:8000/api/user/login',
-        {
-          email,
-          password,
-        }
-      );
+      const response = await Axios.post(`${BASEURLDEV}/api/user/login`, {
+        email,
+        password,
+      });
 
       const { user, token } = response.data;
       console.log(response);
       if (response.status !== 200) {
         setMsg(response.data.message);
         setMsgStatus('fail');
+        setLoader(false);
         throw new Error(response.data.message);
       } else {
         setMsg(response.data.message);
@@ -128,18 +129,25 @@ function AuthProvider({ children }) {
       if (error.response.status === 500) {
         setMsg('Something went really wrong. Please try again!');
         setMsgStatus('fail');
+        setLoader(false);
       } else if (error.response.status === 429) {
         setMsg('Too many requests. Please try again later!');
         setMsgStatus('fail');
+        setLoader(false);
       } else {
         setMsg(error.response.data.message);
         setMsgStatus('fail');
+        setLoader(false);
       }
       console.error('Login failed:', error);
+    } finally {
+      setLoader(false);
+      setLoader('');
     }
   }
 
   function logout() {
+    setLoader(false);
     dispatch({ type: 'logout' });
   }
 
@@ -148,39 +156,39 @@ function AuthProvider({ children }) {
       if (!email || !password || !username) {
         setMsg('Empty field!');
         setMsgStatus('fail');
+        return;
       }
-      const response = await Axios.post(
-        'http://localhost:8000/api/user/register',
-        {
-          email,
-          username,
-          password,
-        }
-      );
-      if (response.status !== 'success') throw new Error(response.data.message);
-      const { userProfile, token } = response.data;
+      const response = await Axios.post(`${BASEURLDEV}/api/user/register`, {
+        email,
+        username,
+        password,
+      });
+
       if (response.status !== 200) {
-        setMsg(response.data.message);
+        setMsg(response.data.message || 'Something went wrong');
         setMsgStatus('fail');
-        throw new Error(response.data.message);
-      } else {
-        setMsg(response.data.message);
-        setMsgStatus('success');
-        console.log(user, token);
-        dispatch({ type: 'signUp', payload: { userProfile, token } });
+        setLoader(false);
+        return;
       }
+
+      const { userProfile, token } = response.data;
+      setMsg(response.data.message);
+      setMsgStatus('success');
+      dispatch({ type: 'signUp', payload: { userProfile, token } });
     } catch (error) {
-      if (error.response.status === 500) {
-        setMsg('something really Wrong. Try again!');
+      if (error.response && error.response.status === 500) {
+        setMsg('Something went wrong. Please try again!');
         setMsgStatus('fail');
-      } else if ((error.response.status = 429)) {
-        setMsg('Too many request. Try again later!');
+        setLoader(false);
+      } else if (error.response && error.response.status === 429) {
+        setMsg('Too many requests. Please try again later!');
         setMsgStatus('fail');
+        setLoader(false);
       } else {
-        setMsg(error.response.data.message);
+        setMsg(error.response.message);
         setMsgStatus('fail');
+        setLoader(false);
       }
-      console.error('Signup failed:', error.message);
     }
   }
 
@@ -198,6 +206,10 @@ function AuthProvider({ children }) {
         msgStatus,
         setMsgStatus,
         handleUserUpdate,
+        loader,
+        setLoader,
+        title,
+        setTitle,
       }}>
       {children}
     </AuthContext.Provider>

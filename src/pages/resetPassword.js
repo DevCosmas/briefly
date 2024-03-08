@@ -6,32 +6,28 @@ import { Link, useNavigate, useParams } from 'react-router-dom';
 import { useAuth } from '../context/authContext';
 import axios from 'axios';
 import ShowAlert from '../components/showAlert';
-;
-
+import { BASEURLDEV, BASEURLPROD } from '../utils/constant';
 function ResetPasswordPage() {
   const navigate = useNavigate();
   const { resetToken } = useParams();
-  const { isAuthenticated, setMsg, msg, setMsgStatus, msgStatus } = useAuth();
+  const { setMsg, msg, setMsgStatus, msgStatus, loader, setLoader } = useAuth();
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
-  const [loader, setLoader] = useState();
 
   async function resetPassword(password, confirmPassword) {
     try {
       const response = await axios.patch(
-        `http://localhost:8000/api/user/reset_Password/${resetToken}`,
+        `${BASEURLDEV}/api/user/reset_Password/${resetToken}`,
         {
           password,
           confirmPassword,
         }
       );
-
-      console.log(resetToken);
       if (response.status === 200) {
         console.log(response);
         setLoader(true);
         const { message } = response.data;
-        console.log(response.data);
+
         setMsg(message);
         setMsgStatus('success');
         setLoader(false);
@@ -40,8 +36,6 @@ function ResetPasswordPage() {
         throw new Error(response.data.message);
       }
     } catch (error) {
-      console.log(error.response);
-
       if (error.response.status === 429) {
         setLoader(false);
         setMsg(error.response.data);
@@ -71,6 +65,7 @@ function ResetPasswordPage() {
   );
   async function handleSubmit(event) {
     event.preventDefault();
+    setLoader(true);
     await resetPassword(password, confirmPassword);
   }
 

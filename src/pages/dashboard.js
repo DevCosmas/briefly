@@ -8,11 +8,22 @@ import ClipCopy from '../components/clip';
 import { Outlet, Link, useNavigate, NavLink } from 'react-router-dom';
 import ShowAlert from '../components/showAlert';
 import Setting from '../components/settingBar';
+import { BASEURLDEV, BASEURLPROD } from '../utils/constant';
 
 function DashBoard({ data }) {
   const [originalUrlInput, setoriginalUrlInput] = useState();
-  const { user, token, msg, setMsg, msgStatus, logout, setMsgStatus } =
-    useAuth();
+  const {
+    user,
+    token,
+    msg,
+    setMsg,
+    msgStatus,
+    logout,
+    setMsgStatus,
+    loader,
+    setLoader,
+    setTitle,
+  } = useAuth();
   const [active, setActive] = useState(false);
   const [settingActive, setSettingActive] = useState(false);
   const [createdLink, setCreatedLink] = useState('');
@@ -27,7 +38,7 @@ function DashBoard({ data }) {
   useEffect(() => {
     setUsername(user.username);
   }, [user]);
-
+  useEffect(() => setTitle('dashboard'), [setTitle]);
   async function createShortUrl(originalUrl) {
     try {
       if (!originalUrl || originalUrl === null) {
@@ -36,7 +47,7 @@ function DashBoard({ data }) {
         return;
       }
       const response = await Axios.post(
-        'http://localhost:8000/createUrl',
+        `${BASEURLDEV}/createUrl`,
         {
           originalUrl,
         },
@@ -81,9 +92,7 @@ function DashBoard({ data }) {
 
   const handleCreateUrl = async (e) => {
     e.preventDefault();
-    console.log(originalUrlInput);
     await createShortUrl(originalUrlInput);
-    // e.reset();
   };
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -111,9 +120,10 @@ function DashBoard({ data }) {
   function cancelSettingActive() {
     setSettingActive(false);
   }
-  function handleLogout() {
-    logout();
+  async function handleLogout() {
+    await logout();
     navigate('/login');
+    setLoader(false);
   }
   return (
     <div className="home">
@@ -374,7 +384,7 @@ function DashBoard({ data }) {
         <span className="tab-wrapper tab-disp">
           <Link
             className="tab-link"
-            to={'/dashboard/anywhere'}>
+            to={'/dashboard/Click_stream'}>
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
