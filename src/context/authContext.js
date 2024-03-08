@@ -7,6 +7,7 @@ import {
 } from 'react';
 import Axios from 'axios';
 import { BASEURLDEV, BASEURLPROD } from '../utils/constant';
+import { useNavigate } from 'react-router-dom';
 
 const AuthContext = createContext();
 
@@ -49,10 +50,12 @@ function AuthProvider({ children }) {
     reducer,
     initialState
   );
+
   const [msg, setMsg] = useState('');
   const [msgStatus, setMsgStatus] = useState('');
   const [loader, setLoader] = useState(false);
   const [title, setTitle] = useState('');
+  const [isSucess, setIsSuccess] = useState(false);
 
   const handleUserUpdate = async (email, username, password) => {
     try {
@@ -121,7 +124,7 @@ function AuthProvider({ children }) {
       } else {
         setMsg(response.data.message);
         setMsgStatus('success');
-        console.log(user, token);
+
         dispatch({ type: 'login', payload: { user, token } });
       }
     } catch (error) {
@@ -174,6 +177,7 @@ function AuthProvider({ children }) {
       const { userProfile, token } = response.data;
       setMsg(response.data.message);
       setMsgStatus('success');
+      setIsSuccess(true);
       dispatch({ type: 'signUp', payload: { userProfile, token } });
     } catch (error) {
       if (error.response && error.response.status === 500) {
@@ -210,6 +214,7 @@ function AuthProvider({ children }) {
         setLoader,
         title,
         setTitle,
+        isSucess,
       }}>
       {children}
     </AuthContext.Provider>

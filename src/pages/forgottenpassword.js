@@ -23,23 +23,17 @@ function ForgottenPasswordPage() {
 
   async function forgettenpassword(email) {
     try {
-      if (!isAuthenticated) return navigate('/login');
       const response = await axios.post(
         `${BASEURLPROD}/api/user/forget_Password`,
         {
           email,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
         }
       );
       if (response.status === 200) {
         const { message } = response.data;
+        console.log(response);
         setMsg(message);
         setMsgStatus('success');
-        setLoader(false);
       } else {
         throw new Error(response.data.message);
       }
@@ -56,7 +50,7 @@ function ForgottenPasswordPage() {
         console.log(error.response);
         setLoader(false);
         setMsg(error.response.data.message);
-        setMsg('fail');
+        setMsgStatus('fail');
       }
     }
   }

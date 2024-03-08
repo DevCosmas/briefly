@@ -16,6 +16,7 @@ function SignUpPage() {
     msgStatus,
     setMsg,
     setTitle,
+    isSucess,
   } = useAuth();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -25,7 +26,14 @@ function SignUpPage() {
     event.preventDefault();
     setLoader(true);
     await signUp(email, password, username);
-    navigate('/login');
+
+    if (!isSucess) {
+      setLoader(false);
+      return;
+    } else {
+      setLoader(false);
+      navigate('/login');
+    }
   }
 
   useEffect(() => {
