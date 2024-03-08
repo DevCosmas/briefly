@@ -25,7 +25,7 @@ function ForgottenPasswordPage() {
     try {
       if (!isAuthenticated) return navigate('/login');
       const response = await axios.post(
-        `${BASEURLDEV}/api/user/forget_Password`,
+        `${BASEURLPROD}/api/user/forget_Password`,
         {
           email,
         },

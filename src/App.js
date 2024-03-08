@@ -39,7 +39,7 @@ function App({ children }) {
 
       const fetchData = async () => {
         try {
-          const response = await axios.get(`${BASEURLDEV}/findAll?`, {
+          const response = await axios.get(`${BASEURLPROD}/findAll?`, {
             headers: {
               Authorization: `Bearer ${token}`,
             },

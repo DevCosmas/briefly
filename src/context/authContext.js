@@ -58,7 +58,7 @@ function AuthProvider({ children }) {
     try {
       // setLoading(true);
       const response = await Axios.patch(
-        `${BASEURLDEV}/api/user/Update_me`,
+        `${BASEURLPROD}/api/user/Update_me`,
         {
           email,
           username,
@@ -106,7 +106,7 @@ function AuthProvider({ children }) {
         setMsg('Empty field!');
         setMsgStatus('fail');
       }
-      const response = await Axios.post(`${BASEURLDEV}/api/user/login`, {
+      const response = await Axios.post(`${BASEURLPROD}/api/user/login`, {
         email,
         password,
       });
@@ -158,7 +158,7 @@ function AuthProvider({ children }) {
         setMsgStatus('fail');
         return;
       }
-      const response = await Axios.post(`${BASEURLDEV}/api/user/register`, {
+      const response = await Axios.post(`${BASEURLPROD}/api/user/register`, {
         email,
         username,
         password,

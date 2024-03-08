@@ -23,7 +23,7 @@ function HistoryBar({ data }) {
   const handleSetDomainName = async (newName) => {
     try {
       const response = await Axios.patch(
-        `${BASEURLDEV}/updateUrl/${dataObj.shortUrl}`,
+        `${BASEURLPROD}/updateUrl/${dataObj.shortUrl}`,
         {
           shortUrl: newName,
         },
@@ -75,7 +75,7 @@ function HistoryBar({ data }) {
     try {
       console.log(dataObj);
       const response = await Axios.delete(
-        `${BASEURLDEV}/deleteUrl/${dataObj._id}`,
+        `${BASEURLPROD}/deleteUrl/${dataObj._id}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,

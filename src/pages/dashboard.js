@@ -47,7 +47,7 @@ function DashBoard({ data }) {
         return;
       }
       const response = await Axios.post(
-        `${BASEURLDEV}/createUrl`,
+        `${BASEURLPROD}/createUrl`,
         {
           originalUrl,
         },

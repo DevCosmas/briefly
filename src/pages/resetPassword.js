@@ -17,7 +17,7 @@ function ResetPasswordPage() {
   async function resetPassword(password, confirmPassword) {
     try {
       const response = await axios.patch(
-        `${BASEURLDEV}/api/user/reset_Password/${resetToken}`,
+        `${BASEURLPROD}/api/user/reset_Password/${resetToken}`,
         {
           password,
           confirmPassword,
