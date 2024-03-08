@@ -215,6 +215,7 @@ function AuthProvider({ children }) {
         title,
         setTitle,
         isSucess,
+        setIsSuccess,
       }}>
       {children}
     </AuthContext.Provider>

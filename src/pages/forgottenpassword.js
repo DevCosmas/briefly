@@ -14,8 +14,10 @@ function ForgottenPasswordPage() {
     msgStatus,
     setMsgStatus,
     setMsg,
-    token,
+
     setTitle,
+    isSucess,
+    setIsSuccess,
   } = useAuth();
   const navigate = useNavigate();
   const [email, setEmail] = useState('');
@@ -34,6 +36,7 @@ function ForgottenPasswordPage() {
         console.log(response);
         setMsg(message);
         setMsgStatus('success');
+        setIsSuccess(true);
       } else {
         throw new Error(response.data.message);
       }
@@ -59,6 +62,11 @@ function ForgottenPasswordPage() {
     event.preventDefault();
     setLoader(true);
     await forgettenpassword(email);
+    if (!isSucess) {
+      return;
+    } else {
+      setLoader(false);
+    }
   }
 
   useEffect(
