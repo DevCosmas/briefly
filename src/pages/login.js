@@ -9,13 +9,13 @@ import ShowAlert from '../components/showAlert';
 function LoginPage() {
   const {
     login,
-    isAuthenticated,
     msg,
     msgStatus,
     setMsg,
     loader,
     setLoader,
     setTitle,
+    isSucess,
   } = useAuth();
   const navigate = useNavigate();
   const [email, setEmail] = useState('');
@@ -26,17 +26,14 @@ function LoginPage() {
     if (loader) {
       setLoader(false);
       await login(email, password);
+      if (isSucess) navigate('/dashboard');
     } else {
       setLoader(true);
       await login(email, password);
+      if (isSucess) navigate('/dashboard');
     }
   }
-  useEffect(
-    function () {
-      if (isAuthenticated) navigate('/dashboard', { replace: true });
-    },
-    [isAuthenticated, navigate]
-  );
+
   useEffect(() => {
     const timer = setTimeout(() => {
       setMsg('');

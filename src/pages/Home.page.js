@@ -14,14 +14,30 @@ function HomePage() {
   const { setTitle } = useAuth();
   useEffect(() => setTitle('Briefly'), [setTitle]);
   function setHarmburgerActive() {
-    console.log('setting-active');
     if (active) {
       return setActive(false);
     } else {
       setActive(true);
     }
   }
+  function closeHarmburger() {
+    if (active) return setActive(false);
+  }
 
+  useEffect(
+    function () {
+      function callback(e) {
+        if (e.code === 'Escape') {
+          closeHarmburger();
+        }
+      }
+      document.addEventListener('keydown', callback);
+      return function () {
+        document.removeEventListener('keydown', callback);
+      };
+    },
+    [closeHarmburger]
+  );
   return (
     <div className="home modal">
       <Header>
@@ -70,17 +86,21 @@ function HomePage() {
           </svg>
         </span>
         <div className={`hamburger-content ${active ? 'content-active' : ''}`}>
-          <a
+          <span
+            onClick={closeHarmburger}
+            className="close-harmbuger">
+            X
+          </span>
+          <Link
             className="h-a"
-            href="/login">
+            to="/login">
             Login
-          </a>
-          <a
+          </Link>
+          <Link
             className="h-a"
-            href="/signUp">
-            {' '}
+            to="/signUp">
             Sign Up
-          </a>
+          </Link>
         </div>
       </Header>
       <main>

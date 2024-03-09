@@ -47,7 +47,8 @@ html {
   overflow-x: hidden;
 }
 .modal {
-  /* background-color: rgba(24, 30, 41, 0.5); */
+  height: 100vh;
+  overflow-y: hidden;
 }
 .header-container {
   display: flex;
@@ -172,15 +173,22 @@ footer {
   padding-top: 2rem;
   color: #c9ced6;
   text-align: center;
-  font-size: 1.4rem;
-  padding-bottom: 2rem;
+  font-size: 1.8rem;
+  padding: 2rem 2rem;
+  padding-bottom: 5rem;
+  position: fixed;
+  width: 100vw;
+  height: 5rem;
+  top: 95%;
 }
 .link-icon {
   width: 20px;
   height: 20px;
   stroke: #c9ced6;
 }
-
+.form-container {
+  overflow-y: hidden;
+}
 .login-form {
   width: 30%;
   min-height: 30rem;
@@ -192,13 +200,15 @@ footer {
   padding: 5rem 5rem;
   box-sizing: border-box;
   margin: 0 auto;
-  font-size: 1.5rem;
+  font-size: 1.8rem;
 }
 .form-input {
   width: 90%;
   border: none;
   outline: none;
   border-bottom: 1.5px solid #0b101b;
+  font-size: 2rem;
+  background-color: #fff;
 }
 .NavLink,
 .btn,
@@ -248,6 +258,7 @@ footer {
   width: 90%;
   padding-left: 0;
   margin-left: 0;
+  font-size: 2rem;
 }
 .pop {
   background-color: rgba(24, 30, 41, 1);
@@ -396,18 +407,40 @@ td.long-content {
   display: none;
   cursor: pointer;
 }
-.h-a {
-  text-decoration: none;
-  color: #c9ced6;
-}
+
 .hamburger-content {
   position: fixed;
-  top: 10%;
-  left: 50%;
-  min-width: 20rem;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  min-width: 100vw;
+  min-height: 100vh;
+  padding: 2rem 2rem;
+  padding-left: 10%;
   color: #c9ced6;
   background-color: #0f1c35;
   display: none;
+  animation: slideIn 0.5s forwards;
+  overflow-y: hidden;
+}
+@keyframes slideIn {
+  from {
+    left: -100%;
+  }
+  to {
+    left: 0;
+  }
+}
+.close-harmbuger {
+  margin-left: 80%;
+  background-color: none;
+  color: red;
+}
+.h-a {
+  text-decoration: none;
+  color: #c9ced6;
+  font-size: 2.5rem;
 }
 .content-active {
   display: flex;
@@ -622,6 +655,8 @@ td.long-content {
 .setting-form {
   background-color: #0f1c35;
   color: #c9ced6;
+  min-width: 90%;
+  height: 35rem;
 }
 .setting-input {
   padding: 0.5rem 0.5rem;
@@ -746,6 +781,7 @@ td.long-content {
 }
 .created-wrapper {
   display: flex;
+  flex-direction: column;
   color: #c9ced6;
   justify-content: space-between;
   align-items: center;
@@ -756,11 +792,8 @@ td.long-content {
   box-sizing: border-box;
 }
 .newCreate-link {
-  max-width: 20rem;
-  max-width: 100px;
-  white-space: nowrap;
-  overflow-x: hidden;
-  text-overflow: ellipsis;
+  width: 90%;
+  text-align: left;
 }
 .click-child {
   display: flex;
@@ -896,6 +929,17 @@ td.long-content {
 .dis {
   display: none;
 }
+.create-link-btn {
+  font-size: 1.86rem;
+}
+.tab-link {
+  text-decoration: none;
+}
+.active {
+  color: orange;
+  text-decoration: none;
+  border-bottom: 1.5px solid orange;
+}
 /* MEDIA QUERY */
 
 @media (max-width: 75.9em) {
@@ -942,6 +986,7 @@ td.long-content {
   }
   .login-form {
     width: 60%;
+    font-size: 1.85rem;
   }
   .tab {
     padding-left: 10%;
@@ -995,12 +1040,24 @@ td.long-content {
 @media (max-width: 37.5em) {
   .login-form {
     width: 80%;
+    font-size: 2rem;
   }
   .mobile-disp-db {
     width: 85%;
     margin-left: 8%;
   }
+  .newCreate-link {
+    margin: 0;
+    width: 30%;
+  }
+  .created-wrapper {
+    align-items: baseline;
+  }
+  .newlink-copy-icon {
+    padding-left: 10%;
+  }
 }
+
 @media (max-width: 35em) {
   .tab-wrapper {
     display: none;
@@ -1030,9 +1087,9 @@ td.long-content {
   .wrapperClass {
     width: 100%;
   }
-  .hamburger-content {
+  /* .hamburger-content {
     left: 30%;
-  }
+  } */
 }
 @media (max-width: 31.25em) {
 }
@@ -1094,11 +1151,20 @@ td.long-content {
   .shorten-btn {
     display: block;
   }
+  .created-wrapper {
+    flex-direction: column;
+    align-items: baseline;
+  }
+  /* .newCreate-link {
+    margin-left: 0;
+    width: 20%;
+    text-align: left;
+  } */
 }
 @media (max-width: 22.5em) {
-  .hamburger-content {
+  /* .hamburger-content {
     left: 10%;
-  }
+  } */
 }
 @media (max-width: 22em) {
   .header-container {

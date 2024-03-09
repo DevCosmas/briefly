@@ -241,6 +241,7 @@ function HistoryBar({ data }) {
       {data.map((item, index) => (
         <div
           className="mobile-disp-db"
+          key={item.shortUrl}
           onClick={() => handleSetIndex(index)}>
           <div
             className={`mobile-disp-newUrl ${

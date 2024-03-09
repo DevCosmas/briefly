@@ -26,14 +26,8 @@ function SignUpPage() {
     event.preventDefault();
     setLoader(true);
     await signUp(email, password, username);
-
-    if (!isSucess) {
-      setLoader(false);
-      return;
-    } else {
-      setLoader(false);
-      navigate('/login');
-    }
+    navigate('/login');
+    setLoader(false);
   }
 
   useEffect(() => {
@@ -45,12 +39,7 @@ function SignUpPage() {
       clearTimeout(timer);
     };
   }, [msg, setMsg]);
-  useEffect(
-    function () {
-      if (isAuthenticated) navigate('/dashboard', { replace: true });
-    },
-    [isAuthenticated, navigate]
-  );
+
   useEffect(() => setTitle('Sign Up'), [setTitle]);
   return (
     <FormPage>

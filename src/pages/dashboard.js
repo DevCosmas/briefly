@@ -103,15 +103,15 @@ function DashBoard({ data }) {
       clearTimeout(timer);
     };
   }, [msg, setMsg]);
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setCreatedLink('');
-    }, 10000);
+  // useEffect(() => {
+  //   const timer = setTimeout(() => {
+  //     setCreatedLink('');
+  //   }, 10000);
 
-    return () => {
-      clearTimeout(timer);
-    };
-  }, [createdLink, setCreatedLink]);
+  //   return () => {
+  //     clearTimeout(timer);
+  //   };
+  // }, [createdLink, setCreatedLink]);
 
   function handleSettingActive() {
     setActive(false);
@@ -234,7 +234,7 @@ function DashBoard({ data }) {
             </span>
             <input
               placeholder="paste your url"
-              className="plchol-input"
+              className="plchol-input  create-link-btn"
               onChange={(e) => setoriginalUrlInput(e.target.value)}
             />
             <Button className="btn btn-dashboard">
@@ -274,201 +274,132 @@ function DashBoard({ data }) {
           {createdLink !== '' && (
             <span className="created-wrapper">
               <p className="newCreate-link">{createdLink}</p>
-              <ClipCopy text={createdLink}></ClipCopy>
+              <p className="newlink-copy-icon">
+                <ClipCopy text={createdLink}></ClipCopy>
+              </p>
             </span>
           )}
         </div>
       </div>
+
       <article className="tab">
         <span className="tab-wrapper">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
             viewBox="0 0 24 24"
-            stroke-width="1.5"
+            strokeWidth="1.5"
             stroke="currentColor"
-            class="tab-icon">
+            className="tab-icon">
             <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
+              strokeLinecap="round"
+              strokeLinejoin="round"
               d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
             />
           </svg>
 
-          <Link
-            className="tab-link"
-            to={'/dashboard'}>
-            History
-          </Link>
+          <NavLink to="/dashboard">
+            <span className="tab-link">History</span>
+          </NavLink>
         </span>
         <span className="tab-wrapper">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
             viewBox="0 0 24 24"
-            stroke-width="1.5"
+            strokeWidth="1.5"
             stroke="currentColor"
-            class="tab-icon">
+            className="tab-icon">
             <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
+              strokeLinecap="round"
+              strokeLinejoin="round"
               d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 0 1 3 19.875v-6.75ZM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 0 1-1.125-1.125V8.625ZM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 0 1-1.125-1.125V4.125Z"
             />
           </svg>
 
-          <Link
-            className="tab-link"
-            to={'/dashboard/stats'}>
-            Statistics
-          </Link>
+          <NavLink to="/dashboard/stats">
+            <span className="tab-link"> Statistics</span>
+          </NavLink>
         </span>
         <span className="tab-wrapper">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
             viewBox="0 0 24 24"
-            stroke-width="1.5"
+            strokeWidth="1.5"
             stroke="currentColor"
-            class="tab-icon">
+            className="tab-icon">
             <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
+              strokeLinecap="round"
+              strokeLinejoin="round"
               d="M2.25 18 9 11.25l4.306 4.306a11.95 11.95 0 0 1 5.814-5.518l2.74-1.22m0 0-5.94-2.281m5.94 2.28-2.28 5.941"
             />
           </svg>
 
-          <Link
-            className="tab-link"
-            to={'/dashboard/Click_stream'}>
-            click streams
-          </Link>
+          <NavLink to="/dashboard/click_stream">
+            <span className="tab-link">Click streams</span>
+          </NavLink>
         </span>
         <span className="tab-wrapper tab-disp">
-          <Link
+          <NavLink
             className="tab-link"
             to={'/dashboard'}>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke-width="1.5"
-              stroke="currentColor"
-              class="tab-icon">
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
-              />
-            </svg>
-          </Link>
+            <span className="tab-link">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke-width="1.5"
+                stroke="currentColor"
+                class="tab-icon">
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+                />
+              </svg>
+            </span>
+          </NavLink>
         </span>
         <span className="tab-wrapper tab-disp">
-          <Link
-            className="tab-link"
-            to={'/dashboard/stats'}>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke-width="1.5"
-              stroke="currentColor"
-              class="tab-icon">
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 0 1 3 19.875v-6.75ZM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 0 1-1.125-1.125V8.625ZM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 0 1-1.125-1.125V4.125Z"
-              />
-            </svg>
-          </Link>
+          <NavLink to={'/dashboard/stats'}>
+            <span className="tab-link">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke-width="1.5"
+                stroke="currentColor"
+                class="tab-icon">
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 0 1 3 19.875v-6.75ZM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 0 1-1.125-1.125V8.625ZM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 0 1-1.125-1.125V4.125Z"
+                />
+              </svg>
+            </span>
+          </NavLink>
         </span>
         <span className="tab-wrapper tab-disp">
-          <Link
-            className="tab-link"
-            to={'/dashboard/Click_stream'}>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke-width="1.5"
-              stroke="currentColor"
-              class="tab-icon">
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                d="M2.25 18 9 11.25l4.306 4.306a11.95 11.95 0 0 1 5.814-5.518l2.74-1.22m0 0-5.94-2.281m5.94 2.28-2.28 5.941"
-              />
-            </svg>
-          </Link>
+          <NavLink to={'/dashboard/Click_stream'}>
+            <span className="tab-link">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke-width="1.5"
+                stroke="currentColor"
+                class="tab-icon">
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M2.25 18 9 11.25l4.306 4.306a11.95 11.95 0 0 1 5.814-5.518l2.74-1.22m0 0-5.94-2.281m5.94 2.28-2.28 5.941"
+                />
+              </svg>
+            </span>
+          </NavLink>
         </span>
       </article>
-      {/* <article className="tab">
-        <span className="tab-wrapper">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            strokeWidth="1.5"
-            stroke="currentColor"
-            className="tab-icon">
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
-            />
-          </svg>
-
-          <NavLink
-            className="tab-link"
-            to="/dashboard"
-            activeClassName="tab-link-active">
-            History
-          </NavLink>
-        </span>
-        <span className="tab-wrapper">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            strokeWidth="1.5"
-            stroke="currentColor"
-            className="tab-icon">
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 0 1 3 19.875v-6.75ZM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 0 1-1.125-1.125V8.625ZM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 0 1-1.125-1.125V4.125Z"
-            />
-          </svg>
-
-          <NavLink
-            className="tab-link"
-            to="/dashboard/stats"
-            activeClassName="tab-link-active">
-            Statistics
-          </NavLink>
-        </span>
-        <span className="tab-wrapper">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            strokeWidth="1.5"
-            stroke="currentColor"
-            className="tab-icon">
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M2.25 18 9 11.25l4.306 4.306a11.95 11.95 0 0 1 5.814-5.518l2.74-1.22m0 0-5.94-2.281m5.94 2.28-2.28 5.941"
-            />
-          </svg>
-
-          <NavLink
-            className="tab-link"
-            to="/dashboard/click_stream"
-            activeClassName="tab-link-active">
-            Click Streams
-          </NavLink>
-        </span>
-      </article> */}
       <Outlet></Outlet>
       <Setting
         settingActive={settingActive}

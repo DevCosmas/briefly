@@ -122,12 +122,14 @@ function AuthProvider({ children }) {
         setLoader(false);
         throw new Error(response.data.message);
       } else {
+        console.log(response);
         setMsg(response.data.message);
         setMsgStatus('success');
 
         dispatch({ type: 'login', payload: { user, token } });
       }
     } catch (error) {
+      console.log(error);
       console.log(error.response);
       if (error.response.status === 500) {
         setMsg('Something went really wrong. Please try again!');
@@ -145,7 +147,6 @@ function AuthProvider({ children }) {
       console.error('Login failed:', error);
     } finally {
       setLoader(false);
-      setLoader('');
     }
   }
 
@@ -166,20 +167,22 @@ function AuthProvider({ children }) {
         username,
         password,
       });
+      console.log(response);
 
-      if (response.status !== 200) {
+      if (response.status !== 201) {
         setMsg(response.data.message || 'Something went wrong');
         setMsgStatus('fail');
         setLoader(false);
         return;
+      } else {
+        const { userProfile, token } = response.data;
+        setMsg(response.data.message);
+        setMsgStatus('success');
+        setIsSuccess(true);
+        dispatch({ type: 'signUp', payload: { userProfile, token } });
       }
-
-      const { userProfile, token } = response.data;
-      setMsg(response.data.message);
-      setMsgStatus('success');
-      setIsSuccess(true);
-      dispatch({ type: 'signUp', payload: { userProfile, token } });
     } catch (error) {
+      console.log(error.response);
       if (error.response && error.response.status === 500) {
         setMsg('Something went wrong. Please try again!');
         setMsgStatus('fail');
@@ -189,7 +192,7 @@ function AuthProvider({ children }) {
         setMsgStatus('fail');
         setLoader(false);
       } else {
-        setMsg(error.response.message);
+        setMsg(error.response.data.message);
         setMsgStatus('fail');
         setLoader(false);
       }
