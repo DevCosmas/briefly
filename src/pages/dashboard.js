@@ -103,15 +103,15 @@ function DashBoard({ data }) {
       clearTimeout(timer);
     };
   }, [msg, setMsg]);
-  // useEffect(() => {
-  //   const timer = setTimeout(() => {
-  //     setCreatedLink('');
-  //   }, 10000);
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setCreatedLink('');
+    }, 10000);
 
-  //   return () => {
-  //     clearTimeout(timer);
-  //   };
-  // }, [createdLink, setCreatedLink]);
+    return () => {
+      clearTimeout(timer);
+    };
+  }, [createdLink, setCreatedLink]);
 
   function handleSettingActive() {
     setActive(false);

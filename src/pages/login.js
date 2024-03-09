@@ -22,18 +22,39 @@ function LoginPage() {
   const [password, setPassword] = useState('');
 
   async function handleLoginSubmit(event) {
-    event.preventDefault();
-    if (loader) {
-      setLoader(false);
-      await login(email, password);
-      if (isSucess) navigate('/dashboard');
-    } else {
+    // console.log('SUCCES', isSucess);
+    // if (loader) {
+    //   setLoader(false);
+    //   await login(email, password);
+    //   if (isSucess) navigate('/dashboard');
+    // } else {
+    //   setLoader(true);
+    //   await login(email, password);
+    //   if (isSucess) navigate('/dashboard');
+    // }
+    try {
+      event.preventDefault();
       setLoader(true);
+
       await login(email, password);
-      if (isSucess) navigate('/dashboard');
-    }
+      navigate('/dashboard');
+      // if (isSucess) {
+      //   console.log('SUCCES', isSucess);
+      //   navigate('/dashboard');
+      // } else {
+      //   setLoader(false);
+      // }
+    } catch (error) {}
+
+    setLoader(false);
   }
 
+  // useEffect(
+  //   function () {
+  //     if (isSucess) navigate('/dashboard');
+  //   },
+  //   [isSucess, navigate]
+  // );
   useEffect(() => {
     const timer = setTimeout(() => {
       setMsg('');

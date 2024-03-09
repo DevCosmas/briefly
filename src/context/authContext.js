@@ -125,7 +125,7 @@ function AuthProvider({ children }) {
         console.log(response);
         setMsg(response.data.message);
         setMsgStatus('success');
-
+        setIsSuccess(true);
         dispatch({ type: 'login', payload: { user, token } });
       }
     } catch (error) {
