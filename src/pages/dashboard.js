@@ -12,8 +12,9 @@ import { BASEURLDEV, BASEURLPROD } from '../utils/constant';
 
 function DashBoard({ data }) {
   const [originalUrlInput, setoriginalUrlInput] = useState();
+  const USER = localStorage.getItem('user');
+  const user = JSON.parse(USER);
   const {
-    user,
     token,
     msg,
     setMsg,
@@ -27,7 +28,7 @@ function DashBoard({ data }) {
   const [active, setActive] = useState(false);
   const [settingActive, setSettingActive] = useState(false);
   const [createdLink, setCreatedLink] = useState('');
-  const [username, setUsername] = useState(user.name);
+  const [username, setUsername] = useState(user.username);
   const navigate = useNavigate();
 
   function handleActiveState() {

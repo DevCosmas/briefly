@@ -19,6 +19,7 @@ import { BASEURLDEV, BASEURLPROD } from './utils/constant';
 function App({ children }) {
   const [data, setData] = useState([]);
   const { token, user, title, setTitle } = useAuth();
+  const tokenFromLocalStorage = localStorage.getItem('token');
 
   useEffect(
     function () {
@@ -41,7 +42,7 @@ function App({ children }) {
         try {
           const response = await axios.get(`${BASEURLPROD}/findAll?`, {
             headers: {
-              Authorization: `Bearer ${token}`,
+              Authorization: `Bearer ${tokenFromLocalStorage || token}`,
             },
             signal: controller.signal,
           });
@@ -56,11 +57,11 @@ function App({ children }) {
       };
 
       fetchData();
-      // return function () {
-      //   controller.abort();
-      // };
+      return function () {
+        controller.abort();
+      };
     },
-    [token, user, data, setData]
+    [token, user, setData, tokenFromLocalStorage]
   );
   return (
     <>

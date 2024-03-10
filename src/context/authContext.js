@@ -76,9 +76,16 @@ function AuthProvider({ children }) {
       // console.log(response);
       if (response.data.status === 'SUCCESS') {
         const { data } = response.data;
-
+        const userToBeStored = {
+          ...data,
+          password: undefined,
+          _id: undefined,
+          resetPasswordToken: undefined,
+          resetTimeExp: undefined,
+        };
         setMsg('Changes saved successfully');
         setMsgStatus('success');
+        localStorage.setItem('user', JSON.stringify(userToBeStored));
         dispatch({ type: 'handleUserUpdate', payload: { data } });
       } else {
         throw new Error('Something went wrong. Please try again later!');
@@ -115,6 +122,13 @@ function AuthProvider({ children }) {
       });
 
       const { user, token } = response.data;
+      const userToBeStored = {
+        ...user,
+        password: undefined,
+        _id: undefined,
+        resetPasswordToken: undefined,
+        resetTimeExp: undefined,
+      };
       console.log(response);
       if (response.status !== 200) {
         setMsg(response.data.message);
@@ -126,6 +140,10 @@ function AuthProvider({ children }) {
         setMsg(response.data.message);
         setMsgStatus('success');
         setIsSuccess(true);
+        const isLoggedIn = true;
+        const Authenticated = localStorage.setItem('auth', isLoggedIn);
+        localStorage.setItem('token', token);
+        localStorage.setItem('user', JSON.stringify(userToBeStored));
         dispatch({ type: 'login', payload: { user, token } });
       }
     } catch (error) {

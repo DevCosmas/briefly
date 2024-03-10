@@ -3,11 +3,11 @@ import Button from './button';
 import { useAuth } from '../context/authContext';
 
 function Setting({ settingActive, handleCancel }) {
-  const { user, handleUserUpdate, loader, setLoader } = useAuth();
+  const { handleUserUpdate, loader, setLoader } = useAuth();
   const [email, setEmail] = useState('');
-
   const [username, setUsername] = useState('');
-
+  const USER = localStorage.getItem('user');
+  const user = JSON.parse(USER);
   useEffect(() => {
     setEmail(user.email);
     setUsername(user.username);
