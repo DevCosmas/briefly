@@ -61,7 +61,7 @@ function App({ children }) {
         controller.abort();
       };
     },
-    [token, user, setData, tokenFromLocalStorage]
+    [token, user, setData, data, tokenFromLocalStorage]
   );
   return (
     <>

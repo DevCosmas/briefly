@@ -17,6 +17,7 @@ function HistoryBar({ data }) {
 
   const [activeIndex, setActiveIndex] = useState(null);
   const [active, setActive] = useState(true);
+  const tokenFromLocalStorage = localStorage.getItem('token');
   // console.log(isAuthenticated);
   const navigate = useNavigate();
 
@@ -29,7 +30,7 @@ function HistoryBar({ data }) {
         },
         {
           headers: {
-            Authorization: `Bearer ${token}`,
+            Authorization: `Bearer ${tokenFromLocalStorage || token}`,
           },
         }
       );
@@ -78,7 +79,7 @@ function HistoryBar({ data }) {
         `${BASEURLPROD}/deleteUrl/${dataObj._id}`,
         {
           headers: {
-            Authorization: `Bearer ${token}`,
+            Authorization: `Bearer ${tokenFromLocalStorage || token}`,
           },
         }
       );
