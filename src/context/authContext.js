@@ -8,6 +8,7 @@ import {
 import Axios from 'axios';
 import { BASEURLDEV, BASEURLPROD } from '../utils/constant';
 import { useNavigate } from 'react-router-dom';
+import { jwtDecode } from 'jwt-decode';
 
 const AuthContext = createContext();
 const tokenFromLocalStorage = localStorage.getItem('token');
@@ -76,7 +77,10 @@ function AuthProvider({ children }) {
       // console.log(response);
       if (response.data.status === 'SUCCESS') {
         const { data } = response.data;
+        const USER = localStorage.getItem('user');
+        const user = JSON.parse(USER);
         const userToBeStored = {
+          ...user,
           ...data,
           password: undefined,
           _id: undefined,
@@ -86,8 +90,6 @@ function AuthProvider({ children }) {
         setMsg('Changes saved successfully');
         setMsgStatus('success');
         localStorage.setItem('user', JSON.stringify(userToBeStored));
-        const UpdatedUser = localStorage.getItem('user');
-        console.log(UpdatedUser, 'UDPADATE');
         dispatch({ type: 'handleUserUpdate', payload: { data } });
       } else {
         throw new Error('Something went wrong. Please try again later!');
@@ -102,6 +104,11 @@ function AuthProvider({ children }) {
         setMsg('Too many requests. Try again later!');
         setMsgStatus('fail');
         setLoader(false);
+      } else if (error.response && error.response.message === 'jwt expired') {
+        setMsg('');
+        setMsgStatus('');
+        localStorage.removeItem('user');
+        localStorage.removeItem('token');
       } else {
         setMsg(error.response.message);
         setMsgStatus('fail');
@@ -124,6 +131,9 @@ function AuthProvider({ children }) {
       });
 
       const { user, token } = response.data;
+      const { exp } = jwtDecode(token);
+      console.log('decodeToken', exp);
+
       const userToBeStored = {
         ...user,
         password: undefined,
@@ -131,28 +141,22 @@ function AuthProvider({ children }) {
         resetPasswordToken: undefined,
         resetTimeExp: undefined,
         isLoggedIn: true,
-        expTime: 60 * 1000,
+        expTime: exp,
       };
-      // console.log(response);
       if (response.status !== 200) {
         setMsg(response.data.message);
         setMsgStatus('fail');
         setLoader(false);
         throw new Error(response.data.message);
       } else {
-        console.log(response);
         setMsg(response.data.message);
         setMsgStatus('success');
         setIsSuccess(true);
-        const isLoggedIn = true;
-        const Authenticated = localStorage.setItem('auth', isLoggedIn);
         localStorage.setItem('token', token);
         localStorage.setItem('user', JSON.stringify(userToBeStored));
         dispatch({ type: 'login', payload: { user, token } });
       }
     } catch (error) {
-      console.log(error);
-      console.log(error.response);
       if (error.response.status === 500) {
         setMsg('Something went really wrong. Please try again!');
         setMsgStatus('fail');
@@ -204,7 +208,6 @@ function AuthProvider({ children }) {
         dispatch({ type: 'signUp', payload: { userProfile, token } });
       }
     } catch (error) {
-      console.log(error.response);
       if (error.response && error.response.status === 500) {
         setMsg('Something went wrong. Please try again!');
         setMsgStatus('fail');

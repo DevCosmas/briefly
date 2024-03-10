@@ -6,16 +6,24 @@ function ProtectedRoute({ children }) {
   const USER = localStorage.getItem('user');
   const PARSEDUSER = JSON.parse(USER);
   const { isLoggedIn, expTime } = PARSEDUSER;
-  const CURRENTTIME = Date.now();
-  console.log(CURRENTTIME, 'TIME');
-  console.log(USER, 'USER');
-  // console.log(localStorage.getItem('token'), 'token');
+  const CURRENTTIME = Math.floor(Date.now() / 1000);
   useEffect(() => {
-    if (!isLoggedIn || expTime >= CURRENTTIME) {
+    if (!isLoggedIn || CURRENTTIME >= expTime) {
       navigate('/login');
       localStorage.removeItem('user');
     }
   }, [isLoggedIn, expTime, CURRENTTIME, navigate]);
+
+  useEffect(() => {
+    const clearLocalStorageTimeout = setTimeout(() => {
+      localStorage.removeItem('user');
+      localStorage.removeItem('token');
+
+      navigate('/login');
+    }, 3600 * 1000);
+
+    return () => clearTimeout(clearLocalStorageTimeout);
+  }, [navigate]);
 
   return isLoggedIn ? children : null;
 }

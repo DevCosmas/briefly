@@ -9,7 +9,7 @@ import Axios from 'axios';
 import ClipCopy from '../components/clip';
 import { BASEURLDEV, BASEURLPROD } from '../utils/constant';
 
-function HistoryBar({ data }) {
+function HistoryBar({ data, loading }) {
   const { token, msg, setMsg, msgStatus, setMsgStatus } = useAuth();
   const [dataObj, setDataObj] = useState(null);
   const [istoDelete, setIstoDelete] = useState(false);
@@ -34,15 +34,13 @@ function HistoryBar({ data }) {
           },
         }
       );
-      console.log(response);
+
       if (response.status !== 200) {
-        console.log(response);
         setMsg(response.data.message);
         setMsgStatus('fail');
         setLoader(false);
         throw new Error(response.data.message);
       } else {
-        console.log(response.data);
         const { message } = response.data;
         setLoader(false);
         setMsg(message);
@@ -74,7 +72,6 @@ function HistoryBar({ data }) {
 
   const handleDeleteLink = async (dataObj, token) => {
     try {
-      console.log(dataObj);
       const response = await Axios.delete(
         `${BASEURLPROD}/deleteUrl/${dataObj._id}`,
         {
@@ -86,7 +83,6 @@ function HistoryBar({ data }) {
 
       setLoader(true);
       if (response.status !== 200) {
-        console.log(response);
         setMsg(response.data.message);
         setMsgStatus('fail');
         setLoader(false);
@@ -94,7 +90,6 @@ function HistoryBar({ data }) {
 
         throw new Error(response.data.message);
       } else {
-        console.log(response.data);
         const { message } = response.data;
         setLoader(false);
         setMsg(message);
@@ -138,8 +133,8 @@ function HistoryBar({ data }) {
 
   const handleSetIndex = (index) => {
     setActiveIndex((prevIndex) => (prevIndex === index ? null : index));
-    console.log(index);
   };
+  console.log(loading, 'Loading');
 
   return (
     <div className="table-container">
@@ -159,6 +154,7 @@ function HistoryBar({ data }) {
           </tr>
         </thead>
         <tbody>
+          {loading && <p className="fecthData-p">LOADING DATA</p>}
           {data.length === 0 || null ? (
             <p className="hist-loader">No data To load 🤨</p>
           ) : (
@@ -246,7 +242,7 @@ function HistoryBar({ data }) {
           onClick={() => handleSetIndex(index)}>
           <div
             className={`mobile-disp-newUrl ${
-              activeIndex === index ? 'active' : ''
+              activeIndex === index ? 'active-bar' : ''
             }`}>
             <p className="mobile-disp-newUrl-p">{item.newUrl}</p>
             <span className="conatiner">

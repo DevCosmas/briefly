@@ -19,6 +19,7 @@ import { BASEURLDEV, BASEURLPROD } from './utils/constant';
 function App({ children }) {
   const [data, setData] = useState([]);
   const { token, user, title, setTitle } = useAuth();
+  const [loader, setLoader] = useState(false);
   const tokenFromLocalStorage = localStorage.getItem('token');
 
   useEffect(
@@ -34,12 +35,14 @@ function App({ children }) {
     },
     [title, setTitle]
   );
+
   useEffect(
     function () {
       const controller = new AbortController();
 
       const fetchData = async () => {
         try {
+          setLoader(true);
           const response = await axios.get(`${BASEURLPROD}/findAll?`, {
             headers: {
               Authorization: `Bearer ${tokenFromLocalStorage || token}`,
@@ -47,12 +50,11 @@ function App({ children }) {
             signal: controller.signal,
           });
           const resData = response.data;
-          console.log(resData);
           const { data: dataFromApi } = resData;
-          console.log('resdata', resData);
           setData(dataFromApi);
         } catch (error) {
           console.log('Error fetching data:', error.response);
+          setLoader(false);
         }
       };
 
@@ -61,7 +63,7 @@ function App({ children }) {
         controller.abort();
       };
     },
-    [token, user, setData, tokenFromLocalStorage]
+    [token, user, setData, data, tokenFromLocalStorage]
   );
   return (
     <>
@@ -101,7 +103,11 @@ function App({ children }) {
           }>
           <Route
             index
-            element={<HistoryBar data={data}></HistoryBar>}
+            element={
+              <HistoryBar
+                loading={loader}
+                data={data}></HistoryBar>
+            }
           />
           <Route
             path="Stats"

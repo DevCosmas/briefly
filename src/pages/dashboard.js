@@ -38,8 +38,13 @@ function DashBoard({ data }) {
   }
 
   useEffect(() => {
-    setUsername(user.username);
-  }, [user]);
+    if (!user || user === null) {
+      localStorage.removeItem('token');
+      navigate('/login');
+    } else {
+      setUsername(user.username);
+    }
+  }, [user, navigate]);
   useEffect(() => setTitle('dashboard'), [setTitle]);
   async function createShortUrl(originalUrl) {
     try {
@@ -66,15 +71,12 @@ function DashBoard({ data }) {
         setMsgStatus('fail');
         throw new Error(response.data.message);
       } else {
-        console.log(response.data);
         const { message, newDoc } = response.data;
         setCreatedLink(newDoc.newUrl);
         setMsg(message);
         setMsgStatus('success');
       }
     } catch (error) {
-      console.log(error);
-      console.log(error.response);
       if (error.response && error.response.status === 500) {
         setMsg('Something went really wrong. Try again!');
         setMsgStatus('fail');
@@ -124,8 +126,13 @@ function DashBoard({ data }) {
   }
   async function handleLogout() {
     await logout();
-    navigate('/login');
-    setLoader(false);
+    if (logout) {
+      localStorage.removeItem('user');
+      localStorage.removeItem('token');
+      navigate('/login');
+      setLoader(false);
+    }
+    return;
   }
   return (
     <div className="home">
@@ -141,7 +148,7 @@ function DashBoard({ data }) {
         <div className="Profile">
           <span
             onClick={() => handleActiveState()}
-            className={`username-wrapper ${active ? 'active' : ''}`}>
+            className={`username-wrapper ${active ? 'active-userBar' : ''}`}>
             <p className="username-wrapper-p"> Hi {username}</p>
           </span>
           <span className="user-content-disp">

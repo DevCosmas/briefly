@@ -50,7 +50,6 @@ function ForgottenPasswordPage() {
         setMsgStatus('');
         navigate('/login');
       } else {
-        console.log(error.response);
         setLoader(false);
         setMsg(error.response.data.message);
         setMsgStatus('fail');

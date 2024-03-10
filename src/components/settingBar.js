@@ -5,7 +5,6 @@ import { useAuth } from '../context/authContext';
 function Setting({ settingActive, handleCancel }) {
   const USER = localStorage.getItem('user');
   const user = JSON.parse(USER);
-  console.log(user);
   const { handleUserUpdate, loader, setLoader } = useAuth();
   const [email, setEmail] = useState(user.email);
   const [username, setUsername] = useState(user.username);
@@ -33,14 +32,12 @@ function Setting({ settingActive, handleCancel }) {
         <label className="setting-heading">Account Setting</label>
         <input
           type="email"
-          // placeholder={`${user.email}`}
           className="form-input setting-input"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
         />
         <input
           type="text"
-          // placeholder={`${user.username}`}
           className="form-input setting-input"
           value={username}
           onChange={(e) => setUsername(e.target.value)}
