@@ -1,17 +1,14 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import Button from './button';
 import { useAuth } from '../context/authContext';
 
 function Setting({ settingActive, handleCancel }) {
-  const { handleUserUpdate, loader, setLoader } = useAuth();
-  const [email, setEmail] = useState('');
-  const [username, setUsername] = useState('');
   const USER = localStorage.getItem('user');
   const user = JSON.parse(USER);
-  useEffect(() => {
-    setEmail(user.email);
-    setUsername(user.username);
-  }, [user]);
+  console.log(user);
+  const { handleUserUpdate, loader, setLoader } = useAuth();
+  const [email, setEmail] = useState(user.email);
+  const [username, setUsername] = useState(user.username);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -36,22 +33,20 @@ function Setting({ settingActive, handleCancel }) {
         <label className="setting-heading">Account Setting</label>
         <input
           type="email"
-          placeholder={`${user.email}`}
+          // placeholder={`${user.email}`}
           className="form-input setting-input"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
         />
         <input
           type="text"
-          placeholder={`${user.username}`}
+          // placeholder={`${user.username}`}
           className="form-input setting-input"
           value={username}
           onChange={(e) => setUsername(e.target.value)}
         />
 
-        <Button
-          className={'form-btn'}
-          disabled={loader}>
+        <Button className={'form-btn'}>
           {loader ? 'Saving...' : 'Save Changes'}
         </Button>
       </form>

@@ -1,21 +1,23 @@
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../context/authContext';
 import { useEffect } from 'react';
 
 function ProtectedRoute({ children }) {
   const navigate = useNavigate();
-  const { isAuthenticated } = useAuth();
-  const isLoggedIn = localStorage.getItem('auth');
   const USER = localStorage.getItem('user');
-  // console.log(isLoggedIn, 'LOGGED IN');
+  const PARSEDUSER = JSON.parse(USER);
+  const { isLoggedIn, expTime } = PARSEDUSER;
+  const CURRENTTIME = Date.now();
+  console.log(CURRENTTIME, 'TIME');
   console.log(USER, 'USER');
   // console.log(localStorage.getItem('token'), 'token');
-  useEffect(
-    function () {
-      if (!isLoggedIn) navigate('/login');
-    },
-    [isLoggedIn, navigate]
-  );
+  useEffect(() => {
+    if (!isLoggedIn || expTime >= CURRENTTIME) {
+      navigate('/login');
+      localStorage.removeItem('user');
+    }
+  }, [isLoggedIn, expTime, CURRENTTIME, navigate]);
+
   return isLoggedIn ? children : null;
 }
+
 export default ProtectedRoute;

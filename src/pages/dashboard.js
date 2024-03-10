@@ -12,6 +12,7 @@ import { BASEURLDEV, BASEURLPROD } from '../utils/constant';
 
 function DashBoard({ data }) {
   const [originalUrlInput, setoriginalUrlInput] = useState();
+  const tokenFromLocalStorage = localStorage.getItem('token');
   const USER = localStorage.getItem('user');
   const user = JSON.parse(USER);
   const {
@@ -54,7 +55,7 @@ function DashBoard({ data }) {
         },
         {
           headers: {
-            Authorization: `Bearer ${token}`,
+            Authorization: `Bearer ${tokenFromLocalStorage || token}`,
           },
         }
       );

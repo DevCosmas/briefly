@@ -10,7 +10,7 @@ import { BASEURLDEV, BASEURLPROD } from '../utils/constant';
 import { useNavigate } from 'react-router-dom';
 
 const AuthContext = createContext();
-
+const tokenFromLocalStorage = localStorage.getItem('token');
 const initialState = {
   user: null,
   isAuthenticated: false,
@@ -69,7 +69,7 @@ function AuthProvider({ children }) {
         },
         {
           headers: {
-            Authorization: `Bearer ${token}`,
+            Authorization: `Bearer ${tokenFromLocalStorage || token}`,
           },
         }
       );
@@ -86,6 +86,8 @@ function AuthProvider({ children }) {
         setMsg('Changes saved successfully');
         setMsgStatus('success');
         localStorage.setItem('user', JSON.stringify(userToBeStored));
+        const UpdatedUser = localStorage.getItem('user');
+        console.log(UpdatedUser, 'UDPADATE');
         dispatch({ type: 'handleUserUpdate', payload: { data } });
       } else {
         throw new Error('Something went wrong. Please try again later!');
@@ -128,8 +130,10 @@ function AuthProvider({ children }) {
         _id: undefined,
         resetPasswordToken: undefined,
         resetTimeExp: undefined,
+        isLoggedIn: true,
+        expTime: 60 * 1000,
       };
-      console.log(response);
+      // console.log(response);
       if (response.status !== 200) {
         setMsg(response.data.message);
         setMsgStatus('fail');
