@@ -1,13 +1,6 @@
-import {
-  createContext,
-  useContext,
-  useReducer,
-  useEffect,
-  useState,
-} from 'react';
+import { createContext, useContext, useReducer, useState } from 'react';
 import Axios from 'axios';
 import { BASEURLDEV, BASEURLPROD } from '../utils/constant';
-import { useNavigate } from 'react-router-dom';
 import { jwtDecode } from 'jwt-decode';
 
 const AuthContext = createContext();
@@ -60,7 +53,6 @@ function AuthProvider({ children }) {
 
   const handleUserUpdate = async (email, username, password) => {
     try {
-      // setLoading(true);
       const response = await Axios.patch(
         `${BASEURLPROD}/api/user/Update_me`,
         {
@@ -74,7 +66,7 @@ function AuthProvider({ children }) {
           },
         }
       );
-      // console.log(response);
+
       if (response.data.status === 'SUCCESS') {
         const { data } = response.data;
         const USER = localStorage.getItem('user');
@@ -95,7 +87,6 @@ function AuthProvider({ children }) {
         throw new Error('Something went wrong. Please try again later!');
       }
     } catch (error) {
-      console.log(error.response);
       if (error.response && error.response.status === 500) {
         setMsg('Something went really wrong. Try again!');
         setMsgStatus('fail');

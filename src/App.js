@@ -20,6 +20,7 @@ function App({ children }) {
   const [data, setData] = useState([]);
   const { token, user, title, setTitle } = useAuth();
   const [loader, setLoader] = useState(false);
+  const [isMounted, setIsMounted] = useState(true);
   const tokenFromLocalStorage = localStorage.getItem('token');
 
   useEffect(
@@ -36,12 +37,17 @@ function App({ children }) {
     [title, setTitle]
   );
 
-  useEffect(
-    function () {
-      const controller = new AbortController();
+  useEffect(() => {
+    setIsMounted(true); // Set isMounted to true when the component mounts
+    return () => setIsMounted(false); // Set isMounted to false when the component unmounts
+  }, []);
 
-      const fetchData = async () => {
-        try {
+  useEffect(() => {
+    const controller = new AbortController();
+
+    const fetchData = async () => {
+      try {
+        if (isMounted) {
           setLoader(true);
           const response = await axios.get(`${BASEURLPROD}/findAll?`, {
             headers: {
@@ -52,19 +58,21 @@ function App({ children }) {
           const resData = response.data;
           const { data: dataFromApi } = resData;
           setData(dataFromApi);
-        } catch (error) {
-          console.log('Error fetching data:', error.response);
+        }
+      } catch (error) {
+        console.log('Error fetching data:', error.response);
+      } finally {
+        if (isMounted) {
           setLoader(false);
         }
-      };
+      }
+    };
 
-      fetchData();
-      return function () {
-        controller.abort();
-      };
-    },
-    [token, user, setData, data, tokenFromLocalStorage]
-  );
+    fetchData();
+    return () => {
+      controller.abort();
+    };
+  }, [token, tokenFromLocalStorage, data, isMounted]);
   return (
     <>
       <Routes>

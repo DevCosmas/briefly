@@ -1,12 +1,11 @@
 import FormPage from '../lib/form';
 import Button from '../components/button';
-
-import { useEffect, useState } from 'react';
-import { Link, useNavigate, useParams } from 'react-router-dom';
-import { useAuth } from '../context/authContext';
 import axios from 'axios';
 import ShowAlert from '../components/showAlert';
-import { BASEURLDEV, BASEURLPROD } from '../utils/constant';
+import { useEffect, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
+import { useAuth } from '../context/authContext';
+import { BASEURLPROD } from '../utils/constant';
 function ResetPasswordPage() {
   const navigate = useNavigate();
   const { resetToken } = useParams();

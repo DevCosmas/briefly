@@ -1,9 +1,7 @@
+import '../App.css';
 import Modal from '../components/modal';
 import FormPage from '../lib/form';
-import Button from '../components/button';
-import '../App.css';
-import { useState, useEffect } from 'react';
-
+import { useEffect } from 'react';
 import { useAuth } from '../context/authContext';
 
 function DeletePage({ data, handleCancelBtn, handleDeleteLink, setDataObj }) {

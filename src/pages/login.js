@@ -1,6 +1,5 @@
 import FormPage from '../lib/form';
 import Button from '../components/button';
-
 import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/authContext';
@@ -26,6 +25,9 @@ function LoginPage() {
       event.preventDefault();
       setLoader(true);
       await login(email, password);
+      if (!isSucess) {
+        return;
+      }
       navigate('/dashboard');
     } catch (error) {}
 

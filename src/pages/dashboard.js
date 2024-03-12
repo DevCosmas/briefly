@@ -8,7 +8,7 @@ import ClipCopy from '../components/clip';
 import { Outlet, Link, useNavigate, NavLink } from 'react-router-dom';
 import ShowAlert from '../components/showAlert';
 import Setting from '../components/settingBar';
-import { BASEURLDEV, BASEURLPROD } from '../utils/constant';
+import { BASEURLPROD } from '../utils/constant';
 
 function DashBoard({ data }) {
   const [originalUrlInput, setoriginalUrlInput] = useState();
@@ -22,7 +22,6 @@ function DashBoard({ data }) {
     msgStatus,
     logout,
     setMsgStatus,
-    loader,
     setLoader,
     setTitle,
   } = useAuth();

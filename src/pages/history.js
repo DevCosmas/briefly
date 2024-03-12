@@ -1,24 +1,23 @@
-import Button from '../components/button';
-import { Link, useNavigate } from 'react-router-dom';
-import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useState } from 'react';
 import { useAuth } from '../context/authContext';
 import EditPage from './modal.page';
 import DeletePage from './delete.modal';
 import DownloadQRCode from '../components/qrcode';
 import Axios from 'axios';
 import ClipCopy from '../components/clip';
-import { BASEURLDEV, BASEURLPROD } from '../utils/constant';
+import { BASEURLPROD } from '../utils/constant';
 
 function HistoryBar({ data, loading }) {
-  const { token, msg, setMsg, msgStatus, setMsgStatus } = useAuth();
+  const { token, setMsg, setMsgStatus } = useAuth();
   const [dataObj, setDataObj] = useState(null);
   const [istoDelete, setIstoDelete] = useState(false);
   const [loader, setLoader] = useState(false);
 
   const [activeIndex, setActiveIndex] = useState(null);
-  const [active, setActive] = useState(true);
+
   const tokenFromLocalStorage = localStorage.getItem('token');
-  // console.log(isAuthenticated);
+
   const navigate = useNavigate();
 
   const handleSetDomainName = async (newName) => {
@@ -134,7 +133,6 @@ function HistoryBar({ data, loading }) {
   const handleSetIndex = (index) => {
     setActiveIndex((prevIndex) => (prevIndex === index ? null : index));
   };
-  console.log(loading, 'Loading');
 
   return (
     <div className="table-container">
@@ -154,7 +152,6 @@ function HistoryBar({ data, loading }) {
           </tr>
         </thead>
         <tbody>
-          {loading && <p className="fecthData-p">LOADING DATA</p>}
           {data.length === 0 || null ? (
             <p className="hist-loader">No data To load 🤨</p>
           ) : (

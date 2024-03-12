@@ -1,7 +1,6 @@
 import '../App.css';
 import React, { useState } from 'react';
 import Button from '../components/button';
-import shortner from './../shortner.png';
 import { Link } from 'react-router-dom';
 import Logo from '../components/logo';
 import Header from '../components/header';
@@ -133,10 +132,8 @@ function HomePage() {
               </svg>
             </span>
             <p className="card-p">
-              lorem lorem lorem lorem lorem lorem lorem lorem lorem v lorem
-              lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem
-              lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem
-              lorem
+              The simpler it is , the easier it becomes. Navigating Briefly app
+              is as easy as one click per time. User exprience is top notch.
             </p>
           </div>
 
@@ -158,10 +155,9 @@ function HomePage() {
               </svg>
             </span>
             <p className="card-p">
-              lorem lorem lorem lorem lorem lorem lorem lorem lorem v lorem
-              lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem
-              lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem
-              lorem
+              Briefly provides you with the opportunity to keep track of your
+              links. The ability to keep track of your Link histories allows you
+              to analyzethe performance of your links.
             </p>
           </div>
           <div className="card animate-bottom">
@@ -182,10 +178,9 @@ function HomePage() {
               </svg>
             </span>
             <p className="card-p">
-              lorem lorem lorem lorem lorem lorem lorem lorem lorem v lorem
-              lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem
-              lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem
-              lorem
+              You can always relie on Briefly to keep the work going on for you.
+              It super flexible and easy. Just one click at a time is what you
+              need
             </p>
           </div>
           <div className="card animate-right">
@@ -206,20 +201,11 @@ function HomePage() {
               </svg>
             </span>
             <p className="card-p">
-              lorem lorem lorem lorem lorem lorem lorem lorem lorem v lorem
-              lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem
-              lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem
-              lorem
+              You can relie on briefly simple analytic tools to make business
+              decision regarding your brand or company.
             </p>
           </div>
         </div>
-        {/* <div className="img-wrapper">
-          <img
-            src={shortner}
-            alt="url shorten demo"
-            className="img-shortner"
-          />
-        </div> */}
       </main>
       <footer>
         <Link to="/signUp">Register</Link> to enjoy unlimited History

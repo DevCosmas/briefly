@@ -7,17 +7,8 @@ import ShowAlert from '../components/showAlert';
 
 function SignUpPage() {
   const navigate = useNavigate();
-  const {
-    signUp,
-    isAuthenticated,
-    loader,
-    setLoader,
-    msg,
-    msgStatus,
-    setMsg,
-    setTitle,
-    isSucess,
-  } = useAuth();
+  const { signUp, loader, setLoader, msg, msgStatus, setMsg, setTitle } =
+    useAuth();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [username, setUsername] = useState('');
@@ -26,8 +17,11 @@ function SignUpPage() {
     event.preventDefault();
     setLoader(true);
     await signUp(email, password, username);
-    navigate('/login');
-    setLoader(false);
+    if (signUp) {
+      navigate('/login');
+      setLoader(false);
+    }
+    return;
   }
 
   useEffect(() => {
