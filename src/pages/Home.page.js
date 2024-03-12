@@ -157,7 +157,7 @@ function HomePage() {
             <p className="card-p">
               Briefly provides you with the opportunity to keep track of your
               links. The ability to keep track of your Link histories allows you
-              to analyzethe performance of your links.
+              to analyze the performance of your links.
             </p>
           </div>
           <div className="card animate-bottom">
