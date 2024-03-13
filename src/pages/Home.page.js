@@ -1,16 +1,26 @@
 import '../App.css';
 import React, { useState } from 'react';
 import Button from '../components/button';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import Logo from '../components/logo';
 import Header from '../components/header';
 import CreateUrlInput from '../components/input';
 import { useAuth } from '../context/authContext';
 import { useEffect } from 'react';
+import ShowAlert from '../components/showAlert';
 
 function HomePage() {
   const [active, setActive] = useState(false);
-  const { setTitle } = useAuth();
+  const {
+    setTitle,
+    setMsg,
+    setMsgStatus,
+    msg,
+    msgStatus,
+    isSucess,
+    setIsSuccess,
+  } = useAuth();
+  const navigate = useNavigate();
   useEffect(() => setTitle('Briefly'), [setTitle]);
   function setHarmburgerActive() {
     if (active) {
@@ -22,7 +32,28 @@ function HomePage() {
   function closeHarmburger() {
     if (active) return setActive(false);
   }
+  function handleClick() {
+    setMsg(
+      'You Need to sign up first. Proceed to login If you have an account already'
+    );
+    setMsgStatus('success');
+    setIsSuccess(true);
+  }
+  useEffect(
+    function () {
+      if (isSucess) navigate('/signUp');
+    },
+    [navigate, isSucess]
+  );
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setMsg('');
+    }, 3000);
 
+    return () => {
+      clearTimeout(timer);
+    };
+  }, [msg, setMsg]);
   useEffect(
     function () {
       function callback(e) {
@@ -39,6 +70,11 @@ function HomePage() {
   );
   return (
     <div className="home modal">
+      {msg !== '' && (
+        <ShowAlert
+          alertMessage={msg}
+          alertType={msgStatus}></ShowAlert>
+      )}
       <Header>
         <Logo></Logo>
         <span className="btn-container">
@@ -110,9 +146,40 @@ function HomePage() {
           and analyze your link <br /> Super easy and fast.
         </p>
 
-        <CreateUrlInput
+        {/* <CreateUrlInput
           wrapperClass="wrapperClass"
-          redirectTo="signUp"></CreateUrlInput>
+          redirectTo="signUp"></CreateUrlInput> */}
+        <div className={`short-plhol  wrapperClass`}>
+          <form className={`plachol-wrapper homepage-input`}>
+            <span className="link-wrapper">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke-width="1.5"
+                stroke="currentColor"
+                class="link-icon">
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M13.19 8.688a4.5 4.5 0 0 1 1.242 7.244l-4.5 4.5a4.5 4.5 0 0 1-6.364-6.364l1.757-1.757m13.35-.622 1.757-1.757a4.5 4.5 0 0 0-6.364-6.364l-4.5 4.5a4.5 4.5 0 0 0 1.242 7.244"
+                />
+              </svg>
+            </span>
+            <input
+              placeholder="paste your url"
+              className="plchol-input"
+            />
+            <Link>
+              <button
+                onClick={() => handleClick()}
+                className="btn">
+                short url now !
+              </button>
+              {/* <Button className={'btn'}>short url now !</Button> */}
+            </Link>
+          </form>
+        </div>
         <div className="card-wrapper">
           <div className="card animate-left">
             <span className="card-span">

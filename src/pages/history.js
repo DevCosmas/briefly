@@ -13,11 +13,10 @@ function HistoryBar({ data, loading }) {
   const [dataObj, setDataObj] = useState(null);
   const [istoDelete, setIstoDelete] = useState(false);
   const [loader, setLoader] = useState(false);
-
   const [activeIndex, setActiveIndex] = useState(null);
-
   const tokenFromLocalStorage = localStorage.getItem('token');
-
+  const userToken = localStorage.getItem('user');
+  const userTokenStr = JSON.parse(userToken);
   const navigate = useNavigate();
 
   const handleSetDomainName = async (newName) => {
@@ -29,7 +28,9 @@ function HistoryBar({ data, loading }) {
         },
         {
           headers: {
-            Authorization: `Bearer ${tokenFromLocalStorage || token}`,
+            Authorization: `Bearer ${
+              userTokenStr.token || tokenFromLocalStorage || token
+            }`,
           },
         }
       );
@@ -75,7 +76,9 @@ function HistoryBar({ data, loading }) {
         `${BASEURLPROD}/deleteUrl/${dataObj._id}`,
         {
           headers: {
-            Authorization: `Bearer ${tokenFromLocalStorage || token}`,
+            Authorization: `Bearer ${
+              userTokenStr.token || tokenFromLocalStorage || token
+            }`,
           },
         }
       );

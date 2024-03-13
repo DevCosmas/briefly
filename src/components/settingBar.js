@@ -4,10 +4,10 @@ import { useAuth } from '../context/authContext';
 
 function Setting({ settingActive, handleCancel }) {
   const USER = localStorage.getItem('user');
-  const user = JSON.parse(USER);
-  const { handleUserUpdate, loader, setLoader } = useAuth();
-  const [email, setEmail] = useState(user.email);
-  const [username, setUsername] = useState(user.username);
+  const userLS = JSON.parse(USER);
+  const { handleUserUpdate, loader, setLoader, user } = useAuth();
+  const [email, setEmail] = useState(userLS.email || user.email);
+  const [username, setUsername] = useState(userLS.username || user.username);
 
   const handleSubmit = async (event) => {
     event.preventDefault();

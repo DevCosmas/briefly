@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/authContext';
 import ShowAlert from '../components/showAlert';
 import axios from 'axios';
-import { BASEURLPROD } from '../utils/constant';
+import { BASEURLDEV, BASEURLPROD } from '../utils/constant';
 
 function ForgottenPasswordPage() {
   const {
@@ -15,8 +15,6 @@ function ForgottenPasswordPage() {
     setMsg,
 
     setTitle,
-    isSucess,
-    setIsSuccess,
   } = useAuth();
   const navigate = useNavigate();
   const [email, setEmail] = useState('');
@@ -32,10 +30,10 @@ function ForgottenPasswordPage() {
       );
       if (response.status === 200) {
         const { message } = response.data;
-        console.log(response);
+        const successful = true;
         setMsg(message);
         setMsgStatus('success');
-        setIsSuccess(true);
+        return successful;
       } else {
         throw new Error(response.data.message);
       }
@@ -56,13 +54,29 @@ function ForgottenPasswordPage() {
     }
   }
 
+  // async function handleForgettenPassword(event) {
+  //   event.preventDefault();
+  //   setLoader(true);
+  //   await forgettenpassword(email);
+  //   if (!isSucess) {
+  //     return;
+  //   } else {
+  //     setLoader(false);
+  //     navigate('/resetPassword');
+  //   }
+  // }
   async function handleForgettenPassword(event) {
     event.preventDefault();
     setLoader(true);
-    await forgettenpassword(email);
-    if (!isSucess) {
-      return;
-    } else {
+    try {
+      const isSuccess = await forgettenpassword(email);
+      navigate('/resetPassword');
+      if (!isSuccess) {
+        return;
+      }
+    } catch (error) {
+      console.error('Password reset failed:', error);
+    } finally {
       setLoader(false);
     }
   }

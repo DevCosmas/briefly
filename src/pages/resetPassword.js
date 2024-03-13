@@ -3,24 +3,21 @@ import Button from '../components/button';
 import axios from 'axios';
 import ShowAlert from '../components/showAlert';
 import { useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/authContext';
-import { BASEURLPROD } from '../utils/constant';
+import { BASEURLDEV, BASEURLPROD } from '../utils/constant';
 function ResetPasswordPage() {
   const navigate = useNavigate();
-  const { resetToken } = useParams();
   const { setMsg, msg, setMsgStatus, msgStatus, loader, setLoader } = useAuth();
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [token, setToken] = useState('');
 
-  async function resetPassword(password, confirmPassword) {
+  async function resetPassword(token, password, confirmPassword) {
     try {
       const response = await axios.patch(
-        `${BASEURLPROD}/api/user/reset_Password/${resetToken}`,
-        {
-          password,
-          confirmPassword,
-        }
+        `${BASEURLPROD}/api/user/reset_Password`,
+        { token, password, confirmPassword }
       );
       if (response.status === 200) {
         console.log(response);
@@ -65,7 +62,8 @@ function ResetPasswordPage() {
   async function handleSubmit(event) {
     event.preventDefault();
     setLoader(true);
-    await resetPassword(password, confirmPassword);
+    await resetPassword(token, password, confirmPassword);
+    navigate('/login');
   }
 
   return (
@@ -83,6 +81,12 @@ function ResetPasswordPage() {
           className="login-form"
           onSubmit={(e) => handleSubmit(e)}>
           <label>Set New Password</label>
+          <input
+            type="text"
+            placeholder="Token"
+            className="form-input"
+            onChange={(e) => setToken(e.target.value)}
+          />
           <input
             type="password"
             placeholder="password"

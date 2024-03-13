@@ -5,6 +5,8 @@ import { jwtDecode } from 'jwt-decode';
 
 const AuthContext = createContext();
 const tokenFromLocalStorage = localStorage.getItem('token');
+const userToken = localStorage.getItem('user');
+const userTokenStr = JSON.parse(userToken);
 const initialState = {
   user: null,
   isAuthenticated: false,
@@ -62,7 +64,9 @@ function AuthProvider({ children }) {
         },
         {
           headers: {
-            Authorization: `Bearer ${tokenFromLocalStorage || token}`,
+            Authorization: `Bearer ${
+              userTokenStr.token || tokenFromLocalStorage || token
+            }`,
           },
         }
       );
@@ -111,6 +115,8 @@ function AuthProvider({ children }) {
   };
 
   async function login(email, password) {
+    localStorage.removeItem('user');
+    localStorage.removeItem('token');
     try {
       if (!email || !password) {
         setMsg('Empty field!');
@@ -123,7 +129,6 @@ function AuthProvider({ children }) {
 
       const { user, token } = response.data;
       const { exp } = jwtDecode(token);
-      console.log('decodeToken', exp);
 
       const userToBeStored = {
         ...user,
@@ -133,6 +138,7 @@ function AuthProvider({ children }) {
         resetTimeExp: undefined,
         isLoggedIn: true,
         expTime: exp,
+        token,
       };
       if (response.status !== 200) {
         setMsg(response.data.message);
@@ -145,6 +151,7 @@ function AuthProvider({ children }) {
         setIsSuccess(true);
         localStorage.setItem('token', token);
         localStorage.setItem('user', JSON.stringify(userToBeStored));
+        console.log('loggedin');
         dispatch({ type: 'login', payload: { user, token } });
       }
     } catch (error) {
@@ -168,11 +175,16 @@ function AuthProvider({ children }) {
   }
 
   function logout() {
+    setIsSuccess(false);
     setLoader(false);
+    localStorage.removeItem('user');
+    localStorage.removeItem('token');
     dispatch({ type: 'logout' });
   }
 
   async function signUp(email, password, username) {
+    localStorage.removeItem('user');
+    localStorage.removeItem('token');
     try {
       if (!email || !password || !username) {
         setMsg('Empty field!');
@@ -184,7 +196,6 @@ function AuthProvider({ children }) {
         username,
         password,
       });
-      console.log(response);
 
       if (response.status !== 201) {
         setMsg(response.data.message || 'Something went wrong');
@@ -193,9 +204,11 @@ function AuthProvider({ children }) {
         return;
       } else {
         const { userProfile, token } = response.data;
+
         setMsg(response.data.message);
         setMsgStatus('success');
         setIsSuccess(true);
+
         dispatch({ type: 'signUp', payload: { userProfile, token } });
       }
     } catch (error) {

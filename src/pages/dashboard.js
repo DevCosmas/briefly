@@ -13,10 +13,13 @@ import { BASEURLPROD } from '../utils/constant';
 function DashBoard({ data }) {
   const [originalUrlInput, setoriginalUrlInput] = useState();
   const tokenFromLocalStorage = localStorage.getItem('token');
+  const userToken = localStorage.getItem('user');
+  const userTokenStr = JSON.parse(userToken);
   const USER = localStorage.getItem('user');
-  const user = JSON.parse(USER);
+  const userLS = JSON.parse(USER);
   const {
     token,
+    user,
     msg,
     setMsg,
     msgStatus,
@@ -24,11 +27,12 @@ function DashBoard({ data }) {
     setMsgStatus,
     setLoader,
     setTitle,
+    isSucess,
   } = useAuth();
   const [active, setActive] = useState(false);
   const [settingActive, setSettingActive] = useState(false);
   const [createdLink, setCreatedLink] = useState('');
-  const [username, setUsername] = useState(user.username);
+  const [username, setUsername] = useState(userLS.username || user.username);
   const navigate = useNavigate();
 
   function handleActiveState() {
@@ -41,7 +45,7 @@ function DashBoard({ data }) {
       localStorage.removeItem('token');
       navigate('/login');
     } else {
-      setUsername(user.username);
+      setUsername(user.username || userLS.username);
     }
   }, [user, navigate]);
   useEffect(() => setTitle('dashboard'), [setTitle]);
@@ -59,7 +63,9 @@ function DashBoard({ data }) {
         },
         {
           headers: {
-            Authorization: `Bearer ${tokenFromLocalStorage || token}`,
+            Authorization: `Bearer ${
+              userTokenStr.token || tokenFromLocalStorage || token
+            }`,
           },
         }
       );
@@ -124,15 +130,14 @@ function DashBoard({ data }) {
     setSettingActive(false);
   }
   async function handleLogout() {
-    await logout();
-    if (logout) {
-      localStorage.removeItem('user');
-      localStorage.removeItem('token');
+    try {
+      await logout();
       navigate('/login');
-      setLoader(false);
+    } catch (error) {
+      console.error('Logout failed:', error);
     }
-    return;
   }
+
   return (
     <div className="home">
       {msg !== '' && (

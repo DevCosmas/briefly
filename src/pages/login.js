@@ -20,18 +20,25 @@ function LoginPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  async function handleLoginSubmit(event) {
-    try {
-      event.preventDefault();
-      setLoader(true);
-      await login(email, password);
-      if (!isSucess) {
-        return;
-      }
-      navigate('/dashboard');
-    } catch (error) {}
-
-    setLoader(false);
+  function handleLoginSubmit(event) {
+    event.preventDefault();
+    setLoader(true);
+    login(email, password)
+      .then(() => {
+        console.log('Login successful');
+        return true;
+      })
+      .then((isSuccess) => {
+        if (isSuccess) {
+          navigate('/dashboard');
+        }
+      })
+      .catch((error) => {
+        console.error('Login failed:', error);
+      })
+      .finally(() => {
+        setLoader(false);
+      });
   }
 
   useEffect(() => {
@@ -59,7 +66,7 @@ function LoginPage() {
           className="login-form"
           onSubmit={(e) => handleLoginSubmit(e)}>
           <input
-            type="text"
+            type="email"
             placeholder="Email"
             className="form-input"
             onChange={(e) => setEmail(e.target.value)}

@@ -22,7 +22,8 @@ function App({ children }) {
   const [loader, setLoader] = useState(false);
   const [isMounted, setIsMounted] = useState(true);
   const tokenFromLocalStorage = localStorage.getItem('token');
-
+  const userToken = localStorage.getItem('user');
+  const userTokenStr = JSON.parse(userToken);
   useEffect(
     function () {
       document.title = `Briefly | ${title}`;
@@ -38,8 +39,8 @@ function App({ children }) {
   );
 
   useEffect(() => {
-    setIsMounted(true); // Set isMounted to true when the component mounts
-    return () => setIsMounted(false); // Set isMounted to false when the component unmounts
+    setIsMounted(true);
+    return () => setIsMounted(false);
   }, []);
 
   useEffect(() => {
@@ -51,7 +52,9 @@ function App({ children }) {
           setLoader(true);
           const response = await axios.get(`${BASEURLPROD}/findAll?`, {
             headers: {
-              Authorization: `Bearer ${tokenFromLocalStorage || token}`,
+              Authorization: `Bearer ${
+                userTokenStr.token || tokenFromLocalStorage || token
+              }`,
             },
             signal: controller.signal,
           });
@@ -72,7 +75,7 @@ function App({ children }) {
     return () => {
       controller.abort();
     };
-  }, [token, tokenFromLocalStorage, data, isMounted]);
+  }, [token, tokenFromLocalStorage, data, isMounted, setData, userTokenStr]);
   return (
     <>
       <Routes>
@@ -95,7 +98,7 @@ function App({ children }) {
           element={<SignUpPage />}
         />
         <Route
-          path="resetPassword/:resetToken"
+          path="resetPassword"
           element={<ResetPasswordPage></ResetPasswordPage>}
         />
         <Route
