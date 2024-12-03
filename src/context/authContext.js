@@ -1,12 +1,23 @@
-import { createContext, useContext, useReducer, useState } from 'react';
+import {
+  createContext,
+  useContext,
+  useReducer,
+  useNavigate,
+  useState,
+} from 'react';
 import Axios from 'axios';
-import { BASEURLDEV, BASEURLPROD } from '../utils/constant';
+import { BASEURLDEV } from '../utils/constant';
 import { jwtDecode } from 'jwt-decode';
+import Cookies from 'js-cookie';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { handleServerError } from '../lib/errorHandler';
+import { toastProp } from '../lib/toast_prop';
 
 const AuthContext = createContext();
-const tokenFromLocalStorage = localStorage.getItem('token');
-const userToken = localStorage.getItem('user');
-const userTokenStr = JSON.parse(userToken);
+const tokenFromCookies = Cookies.get('token');
+const userFromCookies = Cookies.get('user');
+
 const initialState = {
   user: null,
   isAuthenticated: false,
@@ -37,7 +48,7 @@ function reducer(state, action) {
         user: action.payload.data,
       };
     default:
-      throw new Error('No action was found');
+      throw new Error('No action found');
   }
 }
 
@@ -47,82 +58,58 @@ function AuthProvider({ children }) {
     initialState
   );
 
-  const [msg, setMsg] = useState('');
-  const [msgStatus, setMsgStatus] = useState('');
   const [loader, setLoader] = useState(false);
+  const [isSuccess, setIsSuccess] = useState(false);
   const [title, setTitle] = useState('');
-  const [isSucess, setIsSuccess] = useState(false);
 
-  const handleUserUpdate = async (email, username, password) => {
+  // Update user info
+  const handleUserUpdate = async (email, username) => {
     try {
       const response = await Axios.patch(
-        `${BASEURLPROD}/api/user/Update_me`,
-        {
-          email,
-          username,
-          password,
-        },
+        `${BASEURLDEV}/api/user/Update_me`,
+        { email, username },
         {
           headers: {
-            Authorization: `Bearer ${
-              userTokenStr.token || tokenFromLocalStorage || token
-            }`,
+            Authorization: `Bearer ${token || tokenFromCookies}`,
           },
         }
       );
 
       if (response.data.status === 'SUCCESS') {
         const { data } = response.data;
-        const USER = localStorage.getItem('user');
-        const user = JSON.parse(USER);
         const userToBeStored = {
           ...user,
           ...data,
           password: undefined,
           _id: undefined,
           resetPasswordToken: undefined,
-          resetTimeExp: undefined,
         };
-        setMsg('Changes saved successfully');
-        setMsgStatus('success');
-        localStorage.setItem('user', JSON.stringify(userToBeStored));
+
+        Cookies.set('user', JSON.stringify(userToBeStored));
+        toast.success('Changes saved successfully', { ...toastProp });
         dispatch({ type: 'handleUserUpdate', payload: { data } });
       } else {
-        throw new Error('Something went wrong. Please try again later!');
+        throw new Error('Failed to save changes');
       }
     } catch (error) {
-      if (error.response && error.response.status === 500) {
-        setMsg('Something went really wrong. Try again!');
-        setMsgStatus('fail');
-        setLoader(false);
-      } else if (error.response && error.response.status === 429) {
-        setMsg('Too many requests. Try again later!');
-        setMsgStatus('fail');
-        setLoader(false);
-      } else if (error.response && error.response.message === 'jwt expired') {
-        setMsg('');
-        setMsgStatus('');
-        localStorage.removeItem('user');
-        localStorage.removeItem('token');
-      } else {
-        setMsg(error.response.message);
-        setMsgStatus('fail');
-        setLoader(false);
-      }
+      const { response } = error;
+      handleServerError(response.status, response.data.message);
     } finally {
       setLoader(false);
     }
   };
 
+  // Login
   async function login(email, password) {
-    localStorage.removeItem('user');
-    localStorage.removeItem('token');
+    Cookies.remove('user');
+    Cookies.remove('token');
     try {
       if (!email || !password) {
-        setMsg('Empty field!');
-        setMsgStatus('fail');
+        toast.error('Empty field!');
+        return;
       }
-      const response = await Axios.post(`${BASEURLPROD}/api/user/login`, {
+
+      const response = await Axios.post(`${BASEURLDEV}/api/user/login`, {
         email,
         password,
       });
@@ -135,96 +122,68 @@ function AuthProvider({ children }) {
         password: undefined,
         _id: undefined,
         resetPasswordToken: undefined,
-        resetTimeExp: undefined,
         isLoggedIn: true,
         expTime: exp,
         token,
       };
-      if (response.status !== 200) {
-        setMsg(response.data.message);
-        setMsgStatus('fail');
-        setLoader(false);
-        throw new Error(response.data.message);
+
+      if (!response || response.status !== 200) {
+        throw new Error('Bad network connection');
       } else {
-        setMsg(response.data.message);
-        setMsgStatus('success');
-        setIsSuccess(true);
-        localStorage.setItem('token', token);
-        localStorage.setItem('user', JSON.stringify(userToBeStored));
-        console.log('loggedin');
+        // console.log(response);
+        Cookies.set('token', token, { expires: exp / (24 * 60 * 60) });
+        Cookies.set('user', JSON.stringify(userToBeStored));
+        toast.success('Logged in successfully', { ...toastProp });
         dispatch({ type: 'login', payload: { user, token } });
+        setIsSuccess(true);
+        return true;
       }
     } catch (error) {
-      if (error.response.status === 500) {
-        setMsg('Something went really wrong. Please try again!');
-        setMsgStatus('fail');
-        setLoader(false);
-      } else if (error.response.status === 429) {
-        setMsg('Too many requests. Please try again later!');
-        setMsgStatus('fail');
-        setLoader(false);
-      } else {
-        setMsg(error.response.data.message);
-        setMsgStatus('fail');
-        setLoader(false);
-      }
-      console.error('Login failed:', error);
+      console.log(error);
+      console.log(error.response);
+      const { response } = error;
+      handleServerError(response.status, response.data.message);
     } finally {
       setLoader(false);
     }
   }
 
+  // Logout
   function logout() {
-    setIsSuccess(false);
-    setLoader(false);
-    localStorage.removeItem('user');
-    localStorage.removeItem('token');
+    Cookies.remove('user');
+    Cookies.remove('token');
+    toast.success('Logged out successfully');
     dispatch({ type: 'logout' });
   }
 
+  // Sign-up
   async function signUp(email, password, username) {
-    localStorage.removeItem('user');
-    localStorage.removeItem('token');
+    Cookies.remove('user');
+    Cookies.remove('token');
     try {
       if (!email || !password || !username) {
-        setMsg('Empty field!');
-        setMsgStatus('fail');
+        toast.error('Empty field!');
         return;
       }
-      const response = await Axios.post(`${BASEURLPROD}/api/user/register`, {
+
+      const response = await Axios.post(`${BASEURLDEV}/api/user/register`, {
         email,
         username,
         password,
       });
 
       if (response.status !== 201) {
-        setMsg(response.data.message || 'Something went wrong');
-        setMsgStatus('fail');
-        setLoader(false);
-        return;
+        throw new Error(response.data.message || 'Something went wrong');
       } else {
         const { userProfile, token } = response.data;
-
-        setMsg(response.data.message);
-        setMsgStatus('success');
-        setIsSuccess(true);
-
+        toast.success('Registration successful', { ...toastProp });
         dispatch({ type: 'signUp', payload: { userProfile, token } });
       }
     } catch (error) {
-      if (error.response && error.response.status === 500) {
-        setMsg('Something went wrong. Please try again!');
-        setMsgStatus('fail');
-        setLoader(false);
-      } else if (error.response && error.response.status === 429) {
-        setMsg('Too many requests. Please try again later!');
-        setMsgStatus('fail');
-        setLoader(false);
-      } else {
-        setMsg(error.response.data.message);
-        setMsgStatus('fail');
-        setLoader(false);
-      }
+      const { response } = error;
+      handleServerError(response.status, response.data.message);
+    } finally {
+      setLoader(false);
     }
   }
 
@@ -237,17 +196,13 @@ function AuthProvider({ children }) {
         login,
         signUp,
         logout,
-        msg,
-        setMsg,
-        msgStatus,
-        setMsgStatus,
         handleUserUpdate,
         loader,
         setLoader,
-        title,
-        setTitle,
-        isSucess,
+        isSuccess,
         setIsSuccess,
+        setTitle,
+        title,
       }}>
       {children}
     </AuthContext.Provider>

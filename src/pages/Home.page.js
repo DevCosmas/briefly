@@ -13,8 +13,7 @@ function HomePage() {
   const [active, setActive] = useState(false);
   const {
     setTitle,
-    setMsg,
-    setMsgStatus,
+
     msg,
     msgStatus,
     isSucess,
@@ -33,11 +32,11 @@ function HomePage() {
     if (active) return setActive(false);
   }
   function handleClick() {
-    setMsg(
-      'You Need to sign up first. Proceed to login If you have an account already'
-    );
-    setMsgStatus('success');
-    setIsSuccess(true);
+    // setMsg(
+    //   'You Need to sign up first. Proceed to login If you have an account already'
+    // );
+    // setMsgStatus('success');
+    // setIsSuccess(true);
   }
   useEffect(
     function () {
@@ -45,15 +44,7 @@ function HomePage() {
     },
     [navigate, isSucess]
   );
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setMsg('');
-    }, 3000);
 
-    return () => {
-      clearTimeout(timer);
-    };
-  }, [msg, setMsg]);
   useEffect(
     function () {
       function callback(e) {

@@ -43,39 +43,6 @@ function App({ children }) {
     return () => setIsMounted(false);
   }, []);
 
-  useEffect(() => {
-    const controller = new AbortController();
-
-    const fetchData = async () => {
-      try {
-        if (isMounted) {
-          setLoader(true);
-          const response = await axios.get(`${BASEURLPROD}/findAll?`, {
-            headers: {
-              Authorization: `Bearer ${
-                userTokenStr.token || tokenFromLocalStorage || token
-              }`,
-            },
-            signal: controller.signal,
-          });
-          const resData = response.data;
-          const { data: dataFromApi } = resData;
-          setData(dataFromApi);
-        }
-      } catch (error) {
-        console.log('Error fetching data:', error.response);
-      } finally {
-        if (isMounted) {
-          setLoader(false);
-        }
-      }
-    };
-
-    fetchData();
-    return () => {
-      controller.abort();
-    };
-  }, [token, tokenFromLocalStorage, data, isMounted, setData, userTokenStr]);
   return (
     <>
       <Routes>
@@ -121,7 +88,7 @@ function App({ children }) {
             }
           />
           <Route
-            path="Stats"
+            path="stats"
             element={<Stats data={data}></Stats>}
           />
           <Route
